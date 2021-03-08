@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">WorldNews</string>
+    <string name="category_name_general">General</string>
+    <string name="category_name_business">Business</string>
+    <string name="category_name_entertainment">Entertainment</string>
+    <string name="category_name_health">Health</string>
+    <string name="category_name_science">Science</string>
+    <string name="category_name_sports">Sports</string>
+    <string name="category_name_technology">Technology</string>
+</resources>
