@@ -9,13 +9,13 @@ import com.iprokopyuk.worldnews.models.News
 
 @Dao
 interface NewsDao {
-
-    @Query("SELECT * FROM news")
-    fun getNews(): LiveData<List<News>>
-
-    @Query("DELETE FROM news")
-    abstract fun deleteAllNews()
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNews(listNews: List<News>): List<Long>
+//
+//    @Query("SELECT * FROM news")
+//    fun getNews(): LiveData<List<News>>
+//
+////    @Query("DELETE FROM news")
+////    abstract fun deleteAllNews()
+////
+////    @Insert(onConflict = OnConflictStrategy.REPLACE)
+////    fun insertNews(listNews: List<News>): List<Long>
 }

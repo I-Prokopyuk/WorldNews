@@ -8,4 +8,6 @@ internal const val API_KEY = "c201076c808cf73820ebd0af73947373"
 internal const val DB_VERSION = 1;
 internal const val DB_NAME = "NewsDB";
 
+//LOG
+internal const val LOG_TAG = "myLogs"
 

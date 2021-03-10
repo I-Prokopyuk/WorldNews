@@ -1,7 +1,11 @@
 package com.iprokopyuk.worldnews.di.modules
 
 import android.content.Context
+import androidx.paging.PagedList
 import androidx.room.Room
+import com.google.gson.FieldNamingPolicy
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.iprokopyuk.worldnews.app.Application
 import com.iprokopyuk.worldnews.data.local.NewsDatabase
 import com.iprokopyuk.worldnews.data.remote.api.ApiServices
@@ -46,5 +50,27 @@ class AppModule {
 
     @AppScoped
     @Provides
+    fun provideApiServices(retrofit: Retrofit) = retrofit.create(ApiServices::class.java)
+
+    AppScoped
+    @Provides
+    fun provideGson(): Gson {
+        val gsonBuilder = GsonBuilder()
+        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+        return gsonBuilder.create()
+    }
+
+    @AppScoped
+    @Provides
     fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
+
+    @AppScoped
+    @Provides
+    fun providePagedListConfig(): PagedList.Config {
+        return PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setPageSize(15)
+            .build();
+    }
+
 }

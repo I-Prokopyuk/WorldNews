@@ -25,7 +25,7 @@
         tools:ignore="MissingConstraints" />
 
     <include
-        layout="@layout/content_list"
+        layout="@layout/content_news"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"

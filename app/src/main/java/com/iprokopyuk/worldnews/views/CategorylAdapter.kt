@@ -36,7 +36,7 @@ class CategorylAdapter(
     }
 
     class ModelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val categoryName = itemView.category_name as TextView
+        val categoryName = itemView.category_title as TextView
         val categoryImage = itemView.category_image as ImageView
     }
 }
