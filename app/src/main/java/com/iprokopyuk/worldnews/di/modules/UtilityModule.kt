@@ -13,4 +13,3 @@ class UtilityModule {
     @Provides
     fun providePicasso(application: Application) = Picasso.get()
 }
-}

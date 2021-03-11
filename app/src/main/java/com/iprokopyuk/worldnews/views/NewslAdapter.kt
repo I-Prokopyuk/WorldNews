@@ -11,45 +11,55 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.models.News
-import com.iprokopyuk.worldnews.models.NewsCategory
-import kotlinx.android.synthetic.main.item_category.view.*
+import com.squareup.picasso.Callback
+import com.squareup.picasso.MemoryPolicy
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_news.view.*
 
-class NewsPagedListAdapter(
-    val context: Context,
-    val list: List<NewsCategory>,
-    var diffCallback: DiffUtil.ItemCallback<News>
-
-) : PagedListAdapter<News, NewsPagedListAdapter.ModelViewHolder>() {
-
-
-    override fun onCreateViewHolder(
-        parent: ViewGroup,
-        viewType: Int
-    ): NewsPagedListAdapter.ModelViewHolder {
-
-        val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_category, parent, false)
-        return NewsPagedListAdapter.ModelViewHolder(view)
-    }
-
-    override fun getItemCount() = list.size
-
-    override fun onBindViewHolder(holder: CategorylAdapter.ModelViewHolder, position: Int) {
-
-        holder.categoryName.text = list[position].name
-
-        holder.categoryImage.setImageResource(list[position].image)
-
-    }
-
-    override fun onBindViewHolder(holder: NewsPagedListAdapter.ModelViewHolder, position: Int) {
-        TODO("Not yet implemented")
-    }
-
-    class ModelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val categoryName = itemView.category_title as TextView
-        val categoryImage = itemView.category_image as ImageView
-    }
-
-
-}
+class NewsPagedListAdapter
+//    (
+//    val context: Context,
+//    val list: List<News>,
+//    val diffCallback: DiffUtil.ItemCallback<News>
+//    val picasso: Picasso = Picasso.get()
+//
+//) : PagedListAdapter<News, NewsPagedListAdapter.ModelViewHolder>(News.DiffCallback) {
+//
+//
+//    override fun onCreateViewHolder(
+//        parent: ViewGroup,
+//        viewType: Int
+//    ): ModelViewHolder {
+//
+//        val view = LayoutInflater.from(parent.context)
+//            .inflate(R.layout.item_news, parent, false)
+//        return ModelViewHolder(view)
+//    }
+//
+//    override fun getItemCount() = list.size
+//
+//
+//    override fun onBindViewHolder(holder: ModelViewHolder, position: Int) {
+//
+//        holder.newsTitle.text = list[position].title
+//
+//        picasso.load(list[position].image)
+//            .fit()
+//            .centerInside()
+//            .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+//            .into(holder.newsImage, object : Callback {
+//                override fun onSuccess() {
+//                    TODO("Not yet implemented")
+//                }
+//
+//                override fun onError(e: Exception?) {
+//                    TODO("Not yet implemented")
+//                }
+//            })
+//    }
+//
+//    class ModelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+//        val newsTitle = itemView.news_title as TextView
+//        val newsImage = itemView.news_image as ImageView
+//    }
+//}

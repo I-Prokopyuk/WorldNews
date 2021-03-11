@@ -52,7 +52,7 @@ class AppModule {
     @Provides
     fun provideApiServices(retrofit: Retrofit) = retrofit.create(ApiServices::class.java)
 
-    AppScoped
+    @AppScoped
     @Provides
     fun provideGson(): Gson {
         val gsonBuilder = GsonBuilder()

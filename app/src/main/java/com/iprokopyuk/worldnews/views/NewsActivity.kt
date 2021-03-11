@@ -10,17 +10,17 @@ import com.iprokopyuk.worldnews.views.base.BaseActivity
 
 class NewsActivity : BaseActivity() {
 
-    val newsArticleViewModel: NewsViewModel by viewModels {
-        viewModelFactory
-    }
+//    val newsArticleViewModel: NewsViewModel by viewModels {
+//        viewModelFactory
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news)
 
-        initializingCategoryNavigation(this)
+     //   initializingCategoryNavigation(this)
 
-        newsArticleViewModel.getNews()
+       // newsArticleViewModel.getNews()
     }
 
 }

@@ -2,14 +2,12 @@ package com.hadi.viewpager2carousel
 
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.TextView
+import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.iprokopyuk.worldnews.R
+import com.iprokopyuk.worldnews.databinding.ItemCategoryBinding
 import com.iprokopyuk.worldnews.models.NewsCategory
-import kotlinx.android.synthetic.main.item_category.view.*
 
 class CategorylAdapter(
     val context: Context,
@@ -21,22 +19,30 @@ class CategorylAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ModelViewHolder {
 
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.item_category, parent, false)
-        return ModelViewHolder(view)
+        //.inflate(R.layout.item_category, parent, false)
+        val binding = ItemCategoryBinding.inflate(view, parent, false)
+        return ModelViewHolder(binding)
     }
 
     override fun getItemCount() = list.size
 
-    override fun onBindViewHolder(holder: ModelViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ModelViewHolder, position: Int) =
+        holder.bind(list[position])
 
-        holder.categoryName.text = list[position].name
 
-        holder.categoryImage.setImageResource(list[position].image)
-
+    inner class ModelViewHolder(val binding: ItemCategoryBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: NewsCategory) {
+            binding.item = item
+            binding.executePendingBindings()
+        }
     }
 
-    class ModelViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val categoryName = itemView.category_title as TextView
-        val categoryImage = itemView.category_image as ImageView
+
+    companion object {
+        @BindingAdapter("app:src")
+        fun setImageResource(imageView: ImageView, resource: Int) {
+            imageView.setImageResource(resource)
+        }
     }
 }
