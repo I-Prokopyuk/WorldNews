@@ -2,10 +2,6 @@ package com.iprokopyuk.worldnews.utils
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
-import androidx.viewpager2.widget.ViewPager2
-import com.iprokopyuk.worldnews.models.ListNewsCategory
-import com.iprokopyuk.worldnews.models.NewsCategory
-import com.iprokopyuk.worldnews.views.CategoryAdapter
 
 //API
 internal const val API_BASE_URL = "http://api.mediastack.com"
