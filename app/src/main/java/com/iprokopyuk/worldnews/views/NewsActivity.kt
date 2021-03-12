@@ -1,10 +1,10 @@
 package com.iprokopyuk.worldnews.views
 
 import android.os.Bundle
-import androidx.activity.viewModels
+import android.util.Log
 import com.iprokopyuk.worldnews.R
+import com.iprokopyuk.worldnews.utils.CategoryNavigation
 import com.iprokopyuk.worldnews.utils.extensions.initializingCategoryNavigation
-import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
 import com.iprokopyuk.worldnews.views.base.BaseActivity
 
 
@@ -18,9 +18,12 @@ class NewsActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news)
 
-     //   initializingCategoryNavigation(this)
+        Log.d("myLogs", CategoryNavigation.getCategoryList(this).toString())
 
-       // newsArticleViewModel.getNews()
+
+        initializingCategoryNavigation(this)
+
+        // newsArticleViewModel.getNews()
     }
 
 }

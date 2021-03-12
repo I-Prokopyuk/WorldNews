@@ -1,20 +1,20 @@
 package com.iprokopyuk.worldnews.utils.extensions
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
-import com.hadi.viewpager2carousel.CategorylAdapter
 import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.models.NewsCategory
 import com.iprokopyuk.worldnews.utils.CategoryNavigation
 import com.iprokopyuk.worldnews.utils.widget.RecyclerViewItemDecoration
+import com.iprokopyuk.worldnews.views.CategoryAdapter
 import com.iprokopyuk.worldnews.views.NewsActivity
 import kotlinx.android.synthetic.main.content_main.*
 
 fun NewsActivity.initializingCategoryNavigation(context: Context) {
 
     val categoryList = CategoryNavigation.getCategoryList(context) as ArrayList<NewsCategory>
-
 
     viewPager.offscreenPageLimit = 1
 
@@ -37,5 +37,7 @@ fun NewsActivity.initializingCategoryNavigation(context: Context) {
     )
     viewPager.addItemDecoration(itemDecoration)
 
-    viewPager.adapter = CategorylAdapter(context, categoryList)
+    Log.d("myLogs", categoryList.toString())
+
+    viewPager.adapter = CategoryAdapter(categoryList)
 }
