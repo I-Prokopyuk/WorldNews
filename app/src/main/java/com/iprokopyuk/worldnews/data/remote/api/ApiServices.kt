@@ -8,7 +8,6 @@ import retrofit2.http.Query
 interface ApiServices {
 
     @GET("/v1/news?")
-    //fun getArticles: LiveData<Resource<NewsSource>>(
     fun getNews(
         @Query("access_key") key: String,
         @Query("categories") categories: String,

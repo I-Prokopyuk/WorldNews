@@ -14,7 +14,6 @@ import com.iprokopyuk.worldnews.models.News
 import com.squareup.picasso.Callback
 import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.item_news.view.*
 
 class NewsPagedListAdapter
 //    (

@@ -11,8 +11,8 @@ import dagger.android.AndroidInjector
 
 
 @AppScoped
-
-@Component(modules = [AndroidInjectionModule::class, AppModule::class, ViewModelModule::class])
+@Component(modules = [AndroidInjectionModule::class, ViewModelModule::class, AppModule::class])
+//@Component(modules = [AndroidInjectionModule::class, AppModule::class, ViewModelModule::class])
 public interface AppComponent : AndroidInjector<Application> {
 
 
