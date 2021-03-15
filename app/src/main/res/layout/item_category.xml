@@ -2,12 +2,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<!--    <data>-->
+    <data>
 
-<!--        <variable-->
-<!--            name="item"-->
-<!--            type="com.iprokopyuk.worldnews.models.NewsCategory" />-->
-<!--    </data>-->
+        <variable
+            name="item"
+            type="com.iprokopyuk.worldnews.models.NewsCategory" />
+    </data>
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -39,7 +39,7 @@
                 android:layout_marginRight="15dp"
                 android:layout_marginBottom="9dp"
                 android:alpha="0.8"
-                android:text="{item.name}"
+                android:text="@{item.name}"
                 android:textColor="@color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"

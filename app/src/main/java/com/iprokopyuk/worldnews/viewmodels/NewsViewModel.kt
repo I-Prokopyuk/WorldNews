@@ -1,18 +1,19 @@
 package com.iprokopyuk.worldnews.viewmodels
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
 import com.google.gson.Gson
 import com.iprokopyuk.worldnews.data.remote.NewsRepository
 import com.iprokopyuk.worldnews.models.NewsSource
 import com.iprokopyuk.worldnews.utils.LOG_TAG
 import javax.inject.Inject
 
-class NewsViewModel @Inject constructor(private val newsRepository: NewsRepository) : ViewModel() {
+class NewsViewModel @Inject constructor(private val newsRepository: NewsRepository) :
+    BaseViewModel() {
+
     fun getNews() {
 
+        addToDisposable(newsRepository.getNews())
 
-        //newsRepository.getNewsArticles()
 
         val jsonString =
             """{
@@ -65,6 +66,5 @@ class NewsViewModel @Inject constructor(private val newsRepository: NewsReposito
         var testModel = gson.fromJson(jsonString, NewsSource::class.java)
 
         Log.d(LOG_TAG, testModel.toString())
-
     }
 }
