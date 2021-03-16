@@ -63,10 +63,6 @@ class AppModule {
     @AppScoped
     @Provides
     fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
-
-    @AppScoped
-    @Provides
-    fun provideSomeClass() = SomeClass()
 //
 //    @AppScoped
 //    @Provides

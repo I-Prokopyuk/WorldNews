@@ -2,6 +2,7 @@ package com.iprokopyuk.worldnews.utils
 
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 
 //API
 internal const val API_BASE_URL = "http://api.mediastack.com"
@@ -17,6 +18,11 @@ internal const val LOG_TAG = "myLogs"
 @BindingAdapter("android:ImageResource")
 fun setImageResource(imageView: ImageView, resource: Int) {
     imageView.setImageResource(resource)
+}
+
+@BindingAdapter("refreshing")
+fun SwipeRefreshLayout.refreshing(visible: Boolean) {
+    isRefreshing = visible
 }
 
 //@BindingAdapter("android:data")

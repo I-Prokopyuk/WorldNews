@@ -33,4 +33,5 @@ class CategoryAdapter(
     inner class ModelViewHolder(var binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {
     }
+
 }
