@@ -9,9 +9,9 @@ import com.iprokopyuk.worldnews.app.Application
 import com.iprokopyuk.worldnews.data.local.NewsDatabase
 import com.iprokopyuk.worldnews.data.remote.api.ApiServices
 import com.iprokopyuk.worldnews.di.scopes.AppScoped
-import com.iprokopyuk.worldnews.models.SomeClass
 import com.iprokopyuk.worldnews.utils.API_BASE_URL
 import com.iprokopyuk.worldnews.utils.DB_NAME
+import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
 import io.reactivex.disposables.CompositeDisposable
@@ -63,7 +63,11 @@ class AppModule {
     @AppScoped
     @Provides
     fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
-//
+
+    @AppScoped
+    @Provides
+    fun providePicasso(app: Application) = Picasso.get()
+
 //    @AppScoped
 //    @Provides
 //    fun providePagedListConfig(): PagedList.Config {

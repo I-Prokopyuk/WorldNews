@@ -1,6 +1,5 @@
 package com.iprokopyuk.worldnews.models
 
-import androidx.recyclerview.widget.DiffUtil
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -22,17 +21,4 @@ data class News(
     @ColumnInfo(name = "published_at")
     var publishedAt: String? = null
 
-) {
-    companion object {
-        val DiffCallback = object : DiffUtil.ItemCallback<News>() {
-            override fun areItemsTheSame(oldItem: News, newItem: News): Boolean {
-                return oldItem.id == newItem.id
-            }
-
-            override fun areContentsTheSame(oldItem: News, newItem: News): Boolean {
-                return oldItem.title.equals(newItem.title)
-            }
-
-        }
-    }
-}
+)

@@ -37,7 +37,5 @@ fun NewsActivity.initializingCategoryNavigation(context: Context) {
     )
     viewPager.addItemDecoration(itemDecoration)
 
- //   Log.d("myLogs", categoryList.toString())
-
     viewPager.adapter = CategoryAdapter(categoryList)
 }

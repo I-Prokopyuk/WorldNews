@@ -21,9 +21,8 @@
             android:scrollbars="none">
 
             <include
-                android:id="@+id/cm"
                 layout="@layout/content_main"
-                app:news="@{vm}"
+                app:vm="@{vm}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 app:layout_constraintBottom_toBottomOf="parent"

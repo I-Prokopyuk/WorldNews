@@ -62,7 +62,6 @@ dependencies {
     //RxKotlin
     implementation("io.reactivex.rxjava2:rxkotlin:2.4.0")
 
-
     //Dagger2
     implementation 'com.google.dagger:dagger:2.30.1'
     kapt 'com.google.dagger:dagger-compiler:2.30.1'

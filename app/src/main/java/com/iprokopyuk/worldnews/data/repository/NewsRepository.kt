@@ -1,8 +1,12 @@
-package com.iprokopyuk.worldnews.data.remote
+package com.iprokopyuk.worldnews.data.repository
 
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.remote.api.ApiServices
+import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.utils.ICallbackResult
+import io.reactivex.Completable
+import io.reactivex.functions.Action
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class NewsRepository
@@ -10,7 +14,7 @@ class NewsRepository
     private val newsDao: NewsDao,
     private val apiServices: ApiServices,
 ) {
-    fun getNews(callbackResult: ICallbackResult) {
+    fun getNewsFromRemoteRepository(callbackResult: ICallbackResult) {
 
         val result = """{
     "pagination": {
@@ -26,7 +30,7 @@ class NewsRepository
             "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
             "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
             "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
+            "image": null,
             "category": "general",
             "language": "en",
             "country": "us",
@@ -57,8 +61,6 @@ class NewsRepository
         }
     ]
 }"""
-        callbackResult.onResultCallback(result)
-    }
 
 //        apiServices.getNews(API_KEY, "sports", "en")
 //            .subscribeOn(Schedulers.io())
@@ -70,6 +72,20 @@ class NewsRepository
 //                    LOG_TAG, throwable.message.toString()
 //                )
 //            })
+
+
+        callbackResult.onResultCallback(result)
+    }
+
+
+    fun saveToLocalDB(news: List<News>) {
+
+        Completable.fromAction(Action { newsDao.insertNews(news) })
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+
+    }
+
 
 }
 

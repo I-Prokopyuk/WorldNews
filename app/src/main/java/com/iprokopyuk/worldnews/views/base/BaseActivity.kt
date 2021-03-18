@@ -1,10 +1,10 @@
 package com.iprokopyuk.worldnews.views.base
 
-import androidx.lifecycle.ViewModelProvider
+import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import javax.inject.Inject
 
 abstract class BaseActivity : DaggerAppCompatActivity() {
-//    @Inject
-//    lateinit var viewModelFactory: ViewModelProvider.Factory
+    @Inject
+    lateinit var newsViewModel: NewsViewModel
 }

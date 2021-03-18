@@ -5,7 +5,7 @@
     <data>
 
         <variable
-            name="news"
+            name="vm"
             type="com.iprokopyuk.worldnews.viewmodels.NewsViewModel" />
     </data>
 
@@ -33,9 +33,8 @@
             tools:ignore="MissingConstraints" />
 
         <include
-            android:id="@+id/cn"
             layout="@layout/content_news"
-            app:nnn="@{news}"
+            app:vm="@{vm}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
