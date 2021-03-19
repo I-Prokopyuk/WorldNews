@@ -1,6 +1,8 @@
 package com.iprokopyuk.worldnews.utils
 
+import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.paging.PagedList
@@ -8,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.views.NewsAdapter
+import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
@@ -20,8 +23,14 @@ internal const val API_KEY = "c201076c808cf73820ebd0af73947373"
 internal const val DB_VERSION = 1;
 internal const val DB_NAME = "NewsDB";
 
+//Format date
+internal const val DATE_FORMAT_FROM = "yyyy-MM-dd'T'hh:mm:ss+00:00"
+internal const val DATE_FORMAT_TO = "MMM dd, yyyy hh:mm"
+
+
 //LOG
 internal const val LOG_TAG = "myLogs"
+
 
 @BindingAdapter("imageResource")
 fun setImageResource(imageView: ImageView, resource: Int) {
@@ -46,10 +55,23 @@ fun setNews(view: RecyclerView, items: PagedList<News>?) {
     }
 }
 
-@BindingAdapter("android:src")
-fun setImageWithPicasso(imageView: ImageView, url: String?) {
+@BindingAdapter("android:src", "android:progressView")
+fun setImageWithPicasso(imageView: ImageView, url: String?, progressBar: ProgressBar) {
 
-    url?.let { Picasso.get().load(url).into(imageView) }
+    url?.let {
+
+        progressBar.visibility = View.VISIBLE
+
+        Picasso.get().load(url).into(imageView, object : Callback {
+            override fun onSuccess() {
+                progressBar.visibility = View.GONE
+            }
+
+            override fun onError(e: Exception?) {
+            }
+
+        })
+    }
 }
 
 @BindingAdapter("android:setDate")
@@ -57,27 +79,15 @@ fun parseDateFormat(textView: TextView, date: String?) {
 
     date?.let {
 
-        val date =
-            SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss+00:00").parse(date)
-
         val dateParse =
-            SimpleDateFormat("MMM dd, yyyy hh:mm:ss", Locale.getDefault()).format(date)
+            SimpleDateFormat(
+                DATE_FORMAT_TO,
+                Locale.US
+            ).format(SimpleDateFormat(DATE_FORMAT_FROM).parse(date))
 
         textView.text = dateParse
     }
 }
 
-//@BindingAdapter("android:data")
-//fun setVpAdapter(viewPager: ViewPager2, newsCategory: NewsCategory) {
-//
-//    viewPager.adapter?.run {
-//
-//        CategoryAdapter(ListNewsCategory.getListForAdapter()).apply {
-//            viewPager.adapter = this
-//        }
-//    }
-//
-//
-//}
 
 

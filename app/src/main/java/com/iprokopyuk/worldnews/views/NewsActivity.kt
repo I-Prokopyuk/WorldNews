@@ -6,6 +6,7 @@ import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.databinding.ActivityNewsBinding
 import com.iprokopyuk.worldnews.utils.extensions.initializingCategoryNavigation
 import com.iprokopyuk.worldnews.views.base.BaseActivity
+import kotlinx.android.synthetic.main.item_news.*
 
 
 class NewsActivity : BaseActivity() {

@@ -7,9 +7,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.databinding.ItemCategoryBinding
 import com.iprokopyuk.worldnews.models.NewsCategory
+import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
 
 class CategoryAdapter(
-    val list: List<NewsCategory>
+    val list: List<NewsCategory>, val vm: NewsViewModel
 ) : RecyclerView.Adapter<CategoryAdapter.ModelViewHolder>() {
 
 
@@ -26,6 +27,7 @@ class CategoryAdapter(
 
     override fun onBindViewHolder(holder: ModelViewHolder, position: Int) {
         holder.binding.item = list[position]
+        holder.binding.vm = vm
         holder.binding.executePendingBindings()
     }
 

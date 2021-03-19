@@ -14,7 +14,7 @@ class NewsRepository
     private val newsDao: NewsDao,
     private val apiServices: ApiServices,
 ) {
-    fun getNewsFromRemoteRepository(callbackResult: ICallbackResult) {
+    fun getNews(category: String, language: String, callbackResult: ICallbackResult) {
 
         val result = """{
     "pagination": {
@@ -43,7 +43,7 @@ class NewsRepository
             "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
             "source": "TMZ.com",
             "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
+            "category": "sports",
             "language": null,
             "country": "us",
             "published_at": "2020-08-05T05:47:24+00:00"
@@ -54,7 +54,7 @@ class NewsRepository
             "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
             "source": "TMZ.com",
             "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
+            "category": "science",
             "language": "en",
             "country": "us",
             "published_at": null

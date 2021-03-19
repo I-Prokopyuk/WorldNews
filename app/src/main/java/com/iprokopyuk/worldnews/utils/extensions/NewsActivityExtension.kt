@@ -1,7 +1,6 @@
 package com.iprokopyuk.worldnews.utils.extensions
 
 import android.content.Context
-import android.util.Log
 import android.view.View
 import androidx.viewpager2.widget.ViewPager2
 import com.iprokopyuk.worldnews.R
@@ -37,5 +36,5 @@ fun NewsActivity.initializingCategoryNavigation(context: Context) {
     )
     viewPager.addItemDecoration(itemDecoration)
 
-    viewPager.adapter = CategoryAdapter(categoryList)
+    viewPager.adapter = CategoryAdapter(categoryList, newsViewModel)
 }

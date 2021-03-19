@@ -5,6 +5,10 @@
     <data>
 
         <variable
+            name="vm"
+            type="com.iprokopyuk.worldnews.viewmodels.NewsViewModel" />
+
+        <variable
             name="item"
             type="com.iprokopyuk.worldnews.models.NewsCategory" />
     </data>

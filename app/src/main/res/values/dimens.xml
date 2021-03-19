@@ -8,5 +8,5 @@
     <dimen name="news_attribute_font_size">11sp</dimen>
     <dimen name="news_text_padding">12dp</dimen>
     <dimen name="news_text_margin">15dp</dimen>
-    <dimen name="news_text_background_alpha">0.8</dimen>
+    <dimen name="news_text_background_alpha">0.7</dimen>
 </resources>
