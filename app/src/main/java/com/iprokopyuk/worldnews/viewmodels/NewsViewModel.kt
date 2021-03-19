@@ -12,6 +12,8 @@ import com.iprokopyuk.worldnews.models.NewsSource
 import com.iprokopyuk.worldnews.utils.ICallbackResult
 import com.iprokopyuk.worldnews.utils.LOG_TAG
 import com.iprokopyuk.worldnews.utils.NotNullMutableLiveData
+import java.text.SimpleDateFormat
+import java.util.*
 import javax.inject.Inject
 
 class NewsViewModel @Inject constructor(
@@ -40,7 +42,30 @@ class NewsViewModel @Inject constructor(
                 var gson = Gson()
                 var testModel = gson.fromJson(valString, NewsSource::class.java)
 
-                Log.d(LOG_TAG, testModel.data.toString() + "result from Remote repository")
+                val date =
+                    SimpleDateFormat("yyyy-MM-dd", Locale.US).parse(testModel.data[0].publishedAt)
+
+                val dateParse =
+                    SimpleDateFormat("MMM dd, yyyy", Locale.US).format(date)
+
+
+
+                val dateTime =
+                    SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss+00:00").parse(testModel.data[0].publishedAt)
+
+
+                val dateTimeParse =
+                    SimpleDateFormat("MMM dd, yyyy hh:mm:ss").format(dateTime)
+
+
+
+                Log.d(LOG_TAG, date.toString() + " date from parse")
+
+                Log.d(LOG_TAG, dateParse.toString() + " date from foramt")
+
+                Log.d(LOG_TAG, dateTime.toString() + " date from foramt 2")
+
+                Log.d(LOG_TAG, dateTimeParse.toString() + " date from foramt 2")
 
                 newsRepository.saveToLocalDB(testModel.data)
 

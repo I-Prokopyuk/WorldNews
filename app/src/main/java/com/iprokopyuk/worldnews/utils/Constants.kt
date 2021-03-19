@@ -1,6 +1,7 @@
 package com.iprokopyuk.worldnews.utils
 
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
@@ -8,6 +9,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.views.NewsAdapter
 import com.squareup.picasso.Picasso
+import java.text.SimpleDateFormat
+import java.util.*
 
 //API
 internal const val API_BASE_URL = "http://api.mediastack.com"
@@ -47,6 +50,21 @@ fun setNews(view: RecyclerView, items: PagedList<News>?) {
 fun setImageWithPicasso(imageView: ImageView, url: String?) {
 
     url?.let { Picasso.get().load(url).into(imageView) }
+}
+
+@BindingAdapter("android:setDate")
+fun parseDateFormat(textView: TextView, date: String?) {
+
+    date?.let {
+
+        val date =
+            SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss+00:00").parse(date)
+
+        val dateParse =
+            SimpleDateFormat("MMM dd, yyyy hh:mm:ss", Locale.getDefault()).format(date)
+
+        textView.text = dateParse
+    }
 }
 
 //@BindingAdapter("android:data")
