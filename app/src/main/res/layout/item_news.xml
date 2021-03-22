@@ -76,7 +76,7 @@
                 android:alpha="@dimen/news_text_background_alpha"
                 android:background="@color/purple_700"
                 android:padding="@dimen/news_text_padding"
-                android:text="@{item.title}"
+                android:text="@{item.category}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/news_title_font_size"
                 android:textStyle="bold"
