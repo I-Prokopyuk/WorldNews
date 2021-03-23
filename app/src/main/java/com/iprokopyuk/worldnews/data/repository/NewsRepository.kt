@@ -73,7 +73,6 @@ class NewsRepository
 //                )
 //            })
 
-
         callbackResult.onResultCallback(result)
     }
 
@@ -83,10 +82,7 @@ class NewsRepository
         Completable.fromAction(Action { newsDao.insertNews(news) })
             .subscribeOn(Schedulers.io())
             .subscribe()
-
     }
-
-
 }
 
 

@@ -14,17 +14,20 @@ import javax.inject.Inject
 
 class NewsViewModel @Inject constructor(
     private val newsDao: NewsDao,
-    private val newsRepository: NewsRepository
+    private val newsRepository: NewsRepository, var defaultCategory, var defaultLanguagel: String
 ) :
     BaseViewModel() {
+
+    init {
+
+    }
+
+    var defaultCategory = "general"
+    var defaultLanguage = "en"
 
     private val _refreshing: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(false)
     val refreshing: NotNullMutableLiveData<Boolean>
         get() = _refreshing
-
-    val defaultCategory = "general"
-    val defaultLanguage = "en"
-
 
     val items: LiveData<PagedList<News>> =
         LivePagedListBuilder(
@@ -32,7 +35,7 @@ class NewsViewModel @Inject constructor(
             3
         ).build()
 
-    fun getRefresh() {}
+    fun getRefresh() = getNews(defaultCategory, defaultLanguage)
 
     fun getNews(category: String, language: String) {
 
