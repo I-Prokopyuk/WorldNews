@@ -57,9 +57,9 @@ object CategoryNavigation {
         )
         categoryList.add(
             NewsCategory(
-                "technology",
+                "entertainment",
                 context.getString(R.string.category_name_entertainment),
-                getDrawableResourceId(context, "category_c")
+                getDrawableResourceId(context, "category_entertainment")
             )
         )
         return categoryList

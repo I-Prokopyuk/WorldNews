@@ -1,5 +1,6 @@
 package com.iprokopyuk.worldnews.utils
 
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -27,6 +28,9 @@ internal const val DB_NAME = "NewsDB";
 internal const val DATE_FORMAT_FROM = "yyyy-MM-dd'T'hh:mm:ss+00:00"
 internal const val DATE_FORMAT_TO = "MMM dd, yyyy hh:mm"
 
+//Default
+internal const val DEFAULT_CATEGORY = "general"
+internal const val DEFAULT_LANGUAGE = "en"
 
 //LOG
 internal const val LOG_TAG = "myLogs"
@@ -45,8 +49,10 @@ fun SwipeRefreshLayout.refreshing(visible: Boolean) {
 @BindingAdapter("news")
 fun setNews(view: RecyclerView, items: PagedList<News>?) {
     view.adapter?.run {
+        Log.d(LOG_TAG, "NewsAdapter is not new")
         if (this is NewsAdapter) this.submitList(items)
     } ?: run {
+        Log.d(LOG_TAG, "NewsAdapter is new")
         NewsAdapter().apply {
             view.adapter = this
             this.submitList(items)
@@ -54,6 +60,23 @@ fun setNews(view: RecyclerView, items: PagedList<News>?) {
 
     }
 }
+
+//view.adapter.run {
+//    NewsAdapter().apply {
+//        view.adapter = this
+//        this.submitList(items)
+//    }
+//}
+
+//view.adapter?.run {
+//    if (this is NewsAdapter) this.submitList(items)
+//} ?: run {
+//    NewsAdapter().apply {
+//        view.adapter = this
+//        this.submitList(items)
+//    }
+//
+//}
 
 @BindingAdapter("android:src", "android:progressView")
 fun setImageWithPicasso(imageView: ImageView, url: String?, progressBar: ProgressBar) {
