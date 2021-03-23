@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.repository.NewsRepository
 import com.iprokopyuk.worldnews.models.News
@@ -11,6 +12,8 @@ import com.iprokopyuk.worldnews.utils.DEFAULT_CATEGORY
 import com.iprokopyuk.worldnews.utils.DEFAULT_LANGUAGE
 import com.iprokopyuk.worldnews.utils.LOG_TAG
 import com.iprokopyuk.worldnews.utils.NotNullMutableLiveData
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class NewsViewModel @Inject constructor(
@@ -22,23 +25,31 @@ class NewsViewModel @Inject constructor(
     var category: String
     var language: String
 
-
     init {
         category = DEFAULT_CATEGORY
         language = DEFAULT_LANGUAGE
+
+        internetDisposable = ReactiveNetwork.observeInternetConnectivity()
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({ isConnected -> _internetConnection.value = isConnected })
     }
 
+    val _internetConnection: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(false)
+    val internetConnection: NotNullMutableLiveData<Boolean>
+        get() = internetConnection
+
     var tmpItems: LiveData<PagedList<News>> = LivePagedListBuilder(
-//        newsDao.getNews(),
         newsDao.getNews(category, language),
         3
     ).build()
+
 
     private val _refreshing: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(false)
     val refreshing: NotNullMutableLiveData<Boolean>
         get() = _refreshing
 
-    private val _items: NotNullMutableLiveData<LiveData<PagedList<News>>> =
+    var _items: NotNullMutableLiveData<LiveData<PagedList<News>>> =
         NotNullMutableLiveData(tmpItems)
     val items: NotNullMutableLiveData<LiveData<PagedList<News>>>
         get() = _items
@@ -46,6 +57,8 @@ class NewsViewModel @Inject constructor(
     fun getRefresh() = getNews(category, language)
 
     fun getNews(_category: String, _language: String) {
+
+        //internetConnection.value = _internetConnection.value
 
         category = _category
         language = _language
@@ -55,7 +68,6 @@ class NewsViewModel @Inject constructor(
         Log.d(LOG_TAG, language + "<<<< language")
 
         _items.value = LivePagedListBuilder(
-//        newsDao.getNews(),
             newsDao.getNews(category, language),
             3
         ).build()

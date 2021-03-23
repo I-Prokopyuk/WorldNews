@@ -28,9 +28,9 @@ class NewsAdapter : PagedListAdapter<News, ModelViewHolder>(DIFF_CALLBACK) {
         holder.binding.item = getItem(position)
     }
 
-
     inner class ModelViewHolder(var binding: ItemNewsBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
     }
 
     companion object {

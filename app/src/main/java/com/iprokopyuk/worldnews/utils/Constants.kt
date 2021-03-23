@@ -48,6 +48,9 @@ fun SwipeRefreshLayout.refreshing(visible: Boolean) {
 
 @BindingAdapter("news")
 fun setNews(view: RecyclerView, items: PagedList<News>?) {
+
+    Log.d(LOG_TAG, items?.size.toString() + "<<<<<<<<<<<<<<<<<<")
+
     view.adapter?.run {
         Log.d(LOG_TAG, "NewsAdapter is not new")
         if (this is NewsAdapter) this.submitList(items)

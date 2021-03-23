@@ -8,6 +8,7 @@ import javax.inject.Inject
 open class BaseViewModel : ViewModel() {
     @Inject
     lateinit var compositeDisposable: CompositeDisposable
+    lateinit var internetDisposable: Disposable
 
     fun addToDisposable(disposable: Disposable) {
         compositeDisposable.add(disposable)
@@ -15,6 +16,7 @@ open class BaseViewModel : ViewModel() {
 
     override fun onCleared() {
         compositeDisposable.clear()
+        internetDisposable.dispose()
         super.onCleared()
     }
 }
