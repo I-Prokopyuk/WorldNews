@@ -1,18 +1,17 @@
 package com.iprokopyuk.worldnews.views
 
 import android.os.Bundle
-import android.view.View
+import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.google.android.material.snackbar.Snackbar
 import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.databinding.ActivityNewsBinding
+import com.iprokopyuk.worldnews.utils.LOG_TAG
 import com.iprokopyuk.worldnews.utils.extensions.initializingCategoryNavigation
 import com.iprokopyuk.worldnews.views.base.BaseActivity
-import kotlinx.android.synthetic.main.content_main.*
-
 
 class NewsActivity : BaseActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -24,22 +23,28 @@ class NewsActivity : BaseActivity() {
         bindingActivity.vm = newsViewModel
         bindingActivity.setLifecycleOwner(this)
 
-        newsViewModel.internetConnection.observe(this, Observer { t ->
-            if (t) {
+        newsViewModel.internetConnection.observe(this, Observer { internetConnection ->
+            internetConnection.let {
 
-                val snackbar = Snackbar.make(
-                    container_info,
-                    R.string.snackbar_text,
-                    Snackbar.LENGTH_INDEFINITE
-                )
-                    .setAction(
-                        R.string.snackbar_action_text,
-                        View.OnClickListener { newsViewModel.getRefresh() })
+                Log.d(LOG_TAG, internetConnection.toString() + "!!!!")
 
-                snackbar.show()
+                when (it) {
+                    true -> {
+
+                        if (newsViewModel.connectionFlag) {
+                            showSnackbar(
+                                resources.getString(R.string.snackbar_text),
+                                resources.getString(R.string.snackbar_action_text)
+                            )
+                        }
+                    }
+                    false -> {
+                        showToast(resources.getString(R.string.info_no_connection))
+                    }
+                }
             }
         })
-
-
     }
+
+
 }

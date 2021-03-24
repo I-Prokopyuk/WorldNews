@@ -29,7 +29,7 @@ internal const val DATE_FORMAT_FROM = "yyyy-MM-dd'T'hh:mm:ss+00:00"
 internal const val DATE_FORMAT_TO = "MMM dd, yyyy hh:mm"
 
 //Default
-internal const val DEFAULT_CATEGORY = "general"
+internal const val DEFAULT_CATEGORY = "sports"
 internal const val DEFAULT_LANGUAGE = "en"
 
 //LOG
@@ -49,18 +49,19 @@ fun SwipeRefreshLayout.refreshing(visible: Boolean) {
 @BindingAdapter("news")
 fun setNews(view: RecyclerView, items: PagedList<News>?) {
 
-    Log.d(LOG_TAG, items?.size.toString() + "<<<<<<<<<<<<<<<<<<")
+    Log.d(LOG_TAG, "set submitList for adapter")
 
-    view.adapter?.run {
-        Log.d(LOG_TAG, "NewsAdapter is not new")
-        if (this is NewsAdapter) this.submitList(items)
-    } ?: run {
-        Log.d(LOG_TAG, "NewsAdapter is new")
-        NewsAdapter().apply {
-            view.adapter = this
-            this.submitList(items)
+    if(items!=null) {
+
+        view.adapter?.run {
+            if (this is NewsAdapter) this.submitList(items)
+        } ?: run {
+            NewsAdapter().apply {
+                view.adapter = this
+                this.submitList(items)
+            }
+
         }
-
     }
 }
 

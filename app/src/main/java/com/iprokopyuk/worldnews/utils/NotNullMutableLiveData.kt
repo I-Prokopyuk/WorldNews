@@ -8,5 +8,5 @@ class NotNullMutableLiveData<T : Any>(defaultValue: T) : MutableLiveData<T>() {
         value = defaultValue
     }
 
-    override fun getValue()  = super.getValue()!!
+    override fun getValue() = super.getValue()!!
 }

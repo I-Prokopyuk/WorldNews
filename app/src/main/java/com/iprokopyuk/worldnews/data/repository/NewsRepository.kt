@@ -1,9 +1,12 @@
 package com.iprokopyuk.worldnews.data.repository
 
+import android.util.Log
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.remote.api.ApiServices
 import com.iprokopyuk.worldnews.models.News
-import com.iprokopyuk.worldnews.utils.ICallbackResult
+import com.iprokopyuk.worldnews.utils.ICallbackResultBoolean
+import com.iprokopyuk.worldnews.utils.ICallbackResultString
+import com.iprokopyuk.worldnews.utils.LOG_TAG
 import io.reactivex.Completable
 import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +17,7 @@ class NewsRepository
     private val newsDao: NewsDao,
     private val apiServices: ApiServices,
 ) {
-    fun getNews(category: String, language: String, callbackResult: ICallbackResult) {
+    fun getNews(category: String, language: String, callbackResult: ICallbackResultString) {
 
         val result = """{
     "pagination": {
@@ -76,13 +79,29 @@ class NewsRepository
         callbackResult.onResultCallback(result)
     }
 
-    fun saveToLocalDB(news: List<News>) {
+    fun updateLocalDB(
+        news: List<News>,
+        category: String,
+        language: String,
+        callbackResult: ICallbackResultBoolean
+    ) {
 
-        Completable.fromAction(Action { newsDao.insertNews(news) })
-            .subscribeOn(Schedulers.io())
-            .subscribe()
+        deleteFromLocalDB(category, language)
+        saveToLocalDB(news)
+
+        callbackResult.onResultCallback(true)
 
     }
 
+    fun saveToLocalDB(news: List<News>) {
+        Completable.fromAction(Action { newsDao.insertNews(news) })
+            .subscribeOn(Schedulers.io())
+            .subscribe()
+        Log.d(LOG_TAG, "insert")
+    }
 
+    fun deleteFromLocalDB(category: String, language: String) {
+        newsDao.deleteNews(category, language)
+        Log.d(LOG_TAG, "delete")
+    }
 }

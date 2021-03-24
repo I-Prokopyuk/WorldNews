@@ -16,6 +16,9 @@ interface NewsDao {
     @Query("SELECT * FROM news WHERE category = :category AND language= :language")
     fun getNews(category: String, language: String): DataSource.Factory<Int, News>
 
+    @Query("DELETE FROM news WHERE category = :category AND language= :language")
+    abstract fun deleteNews(category: String, language: String)
+
     @Query("DELETE FROM news")
     abstract fun deleteAllNews()
 
