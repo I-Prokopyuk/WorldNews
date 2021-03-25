@@ -26,7 +26,7 @@ class NewsActivity : BaseActivity() {
                 when (it) {
                     true -> {
 
-                        if (newsViewModel.connectionFlag) {
+                        if (newsViewModel.connectionCheck) {
                             showSnackbar(
                                 resources.getString(R.string.snackbar_text),
                                 resources.getString(R.string.snackbar_action_text)

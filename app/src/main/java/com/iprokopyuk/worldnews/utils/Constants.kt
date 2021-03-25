@@ -29,7 +29,7 @@ internal const val DATE_FORMAT_FROM = "yyyy-MM-dd'T'hh:mm:ss+00:00"
 internal const val DATE_FORMAT_TO = "MMM dd, yyyy hh:mm"
 
 //Default
-internal const val DEFAULT_CATEGORY = "sports"
+internal const val DEFAULT_CATEGORY = "general"
 internal const val DEFAULT_LANGUAGE = "en"
 
 //LOG
@@ -51,35 +51,24 @@ fun setNews(view: RecyclerView, items: PagedList<News>?) {
 
     Log.d(LOG_TAG, "set submitList for adapter")
 
-    if (items != null) {
 
-        view.adapter?.run {
-            if (this is NewsAdapter) this.submitList(items)
-        } ?: run {
-            NewsAdapter().apply {
-                view.adapter = this
-                this.submitList(items)
-            }
-        }
+    //  if (items != null) {
+
+    view.adapter?.run {
+
+        if (this is NewsAdapter) {
+            this.submitList(items)
+            Log.d(LOG_TAG, "adapter old")
+    }
+} ?: run {
+    Log.d(LOG_TAG, "adapter new")
+    NewsAdapter().apply {
+        view.adapter = this
+        this.submitList(items)
     }
 }
-
-//view.adapter.run {
-//    NewsAdapter().apply {
-//        view.adapter = this
-//        this.submitList(items)
-//    }
-//}
-
-//view.adapter?.run {
-//    if (this is NewsAdapter) this.submitList(items)
-//} ?: run {
-//    NewsAdapter().apply {
-//        view.adapter = this
-//        this.submitList(items)
-//    }
-//
-//}
+//  }
+}
 
 @BindingAdapter("android:src", "android:progressView")
 fun setImageWithPicasso(imageView: ImageView, url: String?, progressBar: ProgressBar) {

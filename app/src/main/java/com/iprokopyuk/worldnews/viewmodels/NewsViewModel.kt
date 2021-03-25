@@ -1,18 +1,22 @@
 package com.iprokopyuk.worldnews.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.repository.NewsRepository
+import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import com.iprokopyuk.worldnews.models.News
-import com.iprokopyuk.worldnews.utils.*
+import com.iprokopyuk.worldnews.utils.DEFAULT_CATEGORY
+import com.iprokopyuk.worldnews.utils.DEFAULT_LANGUAGE
+import com.iprokopyuk.worldnews.utils.ICallbackResultBoolean
+import com.iprokopyuk.worldnews.utils.NotNullMutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+@AppScoped
 class NewsViewModel @Inject constructor(
     private val newsDao: NewsDao,
     private val newsRepository: NewsRepository
@@ -21,7 +25,7 @@ class NewsViewModel @Inject constructor(
 
     var category: String
     var language: String
-    var connectionFlag: Boolean = false
+    var connectionCheck: Boolean = false
 
 
     init {
@@ -33,11 +37,10 @@ class NewsViewModel @Inject constructor(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ isConnected ->
                 _internetConnection.value = isConnected
-                connectionFlag = true
-                getNews(category, language)
+                if (!connectionCheck) getNews(category, language)
+                connectionCheck = true
             })
     }
-
 
     private var _internetConnection: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(true)
     val internetConnection: NotNullMutableLiveData<Boolean>
@@ -63,25 +66,15 @@ class NewsViewModel @Inject constructor(
         category = _category
         language = _language
 
-
         if (internetConnection.value == true) {
-
-            Log.d(LOG_TAG, "Internet true, get data from repository")
 
             newsRepository.getNews(category, language, callbackResultNews)
 
         } else {
 
-            _items.value = LivePagedListBuilder(
-                newsDao.getNews(category, language),
-                3
-            ).build()
-
-            Log.d(LOG_TAG, "Internet false, get data from DB offline mode")
+            _items.value = getLivePagedListBuilder()
 
             _refreshing.value = false
-
-            Log.d(LOG_TAG, category + " " + language)
         }
     }
 
@@ -93,7 +86,7 @@ class NewsViewModel @Inject constructor(
     inner class CallbackResultNews : ICallbackResultBoolean {
         override fun onResultCallback(_result: Boolean) {
 
-            _items = NotNullMutableLiveData(getLivePagedListBuilder())
+            _items.value = getLivePagedListBuilder()
 
             _refreshing.value = false
         }
