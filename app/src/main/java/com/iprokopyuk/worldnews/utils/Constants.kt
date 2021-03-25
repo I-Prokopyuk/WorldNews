@@ -51,7 +51,7 @@ fun setNews(view: RecyclerView, items: PagedList<News>?) {
 
     Log.d(LOG_TAG, "set submitList for adapter")
 
-    if(items!=null) {
+    if (items != null) {
 
         view.adapter?.run {
             if (this is NewsAdapter) this.submitList(items)
@@ -60,7 +60,6 @@ fun setNews(view: RecyclerView, items: PagedList<News>?) {
                 view.adapter = this
                 this.submitList(items)
             }
-
         }
     }
 }

@@ -1,12 +1,10 @@
 package com.iprokopyuk.worldnews.views
 
 import android.os.Bundle
-import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.databinding.ActivityNewsBinding
-import com.iprokopyuk.worldnews.utils.LOG_TAG
 import com.iprokopyuk.worldnews.utils.extensions.initializingCategoryNavigation
 import com.iprokopyuk.worldnews.views.base.BaseActivity
 
@@ -25,9 +23,6 @@ class NewsActivity : BaseActivity() {
 
         newsViewModel.internetConnection.observe(this, Observer { internetConnection ->
             internetConnection.let {
-
-                Log.d(LOG_TAG, internetConnection.toString() + "!!!!")
-
                 when (it) {
                     true -> {
 

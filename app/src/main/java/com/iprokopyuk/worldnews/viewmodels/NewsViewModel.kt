@@ -5,11 +5,9 @@ import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
-import com.google.gson.Gson
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.repository.NewsRepository
 import com.iprokopyuk.worldnews.models.News
-import com.iprokopyuk.worldnews.models.NewsSource
 import com.iprokopyuk.worldnews.utils.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -20,9 +18,11 @@ class NewsViewModel @Inject constructor(
     private val newsRepository: NewsRepository
 ) : BaseViewModel(
 ) {
+
     var category: String
     var language: String
     var connectionFlag: Boolean = false
+
 
     init {
         category = DEFAULT_CATEGORY
@@ -38,6 +38,7 @@ class NewsViewModel @Inject constructor(
             })
     }
 
+
     private var _internetConnection: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(true)
     val internetConnection: NotNullMutableLiveData<Boolean>
         get() = _internetConnection
@@ -46,60 +47,42 @@ class NewsViewModel @Inject constructor(
     val refreshing: NotNullMutableLiveData<Boolean>
         get() = _refreshing
 
-    var _items: NotNullMutableLiveData<LiveData<PagedList<News>>>? = null
-    val items: NotNullMutableLiveData<LiveData<PagedList<News>>>?
+    var _items: NotNullMutableLiveData<LiveData<PagedList<News>>?> = NotNullMutableLiveData(null)
+    val items: NotNullMutableLiveData<LiveData<PagedList<News>>?>
         get() = _items
 
 
+    var callbackResultNews = CallbackResultNews()
+
+    fun getRefresh() = getNews(category, language)
+
     fun getNews(_category: String, _language: String) {
+
+        _refreshing.value = true
 
         category = _category
         language = _language
 
 
-        if (internetConnection.value) {
+        if (internetConnection.value == true) {
 
             Log.d(LOG_TAG, "Internet true, get data from repository")
 
-            _refreshing.value = true
-
-            newsRepository.getNews(category, language, object : ICallbackResultString {
-                override fun onResultCallback(valString: String) {
-                    var gson = Gson()
-                    var testModel = gson.fromJson(valString, NewsSource::class.java)
-
-                    if (testModel.data.size > 0) {
-                        updateLocalDB(
-                            testModel.data,
-                            object : ICallbackResultBoolean {
-                                override fun onResultCallback(valBoolean: Boolean) {
-                                    if (valBoolean) _items =
-                                        NotNullMutableLiveData(getLivePagedListBuilder())
-                                }
-
-                                override fun onErrorCallback(result: String) {
-                                    TODO("Not yet implemented")
-                                }
-
-                            })
-
-
-                    } else {
-                        Log.d(LOG_TAG, "No articles in this category")
-                    }
-
-                    _refreshing.value = false
-                }
-
-                override fun onErrorCallback(result: String) {
-                    TODO("Not yet implemented")
-                }
-            })
+            newsRepository.getNews(category, language, callbackResultNews)
 
         } else {
-            _items = NotNullMutableLiveData(getLivePagedListBuilder())
-        }
 
+            _items.value = LivePagedListBuilder(
+                newsDao.getNews(category, language),
+                3
+            ).build()
+
+            Log.d(LOG_TAG, "Internet false, get data from DB offline mode")
+
+            _refreshing.value = false
+
+            Log.d(LOG_TAG, category + " " + language)
+        }
     }
 
     fun getLivePagedListBuilder() = LivePagedListBuilder(
@@ -107,12 +90,16 @@ class NewsViewModel @Inject constructor(
         3
     ).build()
 
-    fun updateLocalDB(
-        news: List<News>,
-        callbackResult: ICallbackResultBoolean
-    ) {
-        newsRepository.updateLocalDB(news, category, language, callbackResult)
-    }
+    inner class CallbackResultNews : ICallbackResultBoolean {
+        override fun onResultCallback(_result: Boolean) {
 
-    fun getRefresh() = getNews(category, language)
+            _items = NotNullMutableLiveData(getLivePagedListBuilder())
+
+            _refreshing.value = false
+        }
+
+        override fun onErrorCallback(_error: String) {
+            _refreshing.value = false
+        }
+    }
 }

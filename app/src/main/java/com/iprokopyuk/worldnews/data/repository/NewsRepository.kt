@@ -1,13 +1,16 @@
 package com.iprokopyuk.worldnews.data.repository
 
 import android.util.Log
+import com.google.gson.Gson
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.remote.api.ApiServices
 import com.iprokopyuk.worldnews.models.News
+import com.iprokopyuk.worldnews.models.NewsSource
 import com.iprokopyuk.worldnews.utils.ICallbackResultBoolean
-import com.iprokopyuk.worldnews.utils.ICallbackResultString
 import com.iprokopyuk.worldnews.utils.LOG_TAG
+import com.iprokopyuk.worldnews.utils.ioThread
 import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Action
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -17,7 +20,7 @@ class NewsRepository
     private val newsDao: NewsDao,
     private val apiServices: ApiServices,
 ) {
-    fun getNews(category: String, language: String, callbackResult: ICallbackResultString) {
+    fun getNews(category: String, language: String, callbackResult: ICallbackResultBoolean) {
 
         val result = """{
     "pagination": {
@@ -72,11 +75,31 @@ class NewsRepository
 //            .retry(2)
 //            .subscribe({ listNews -> Log.d(LOG_TAG, listNews.toString()) }, { throwable ->
 //                Log.d(
+
+        if (result != null) {
+
+            var gson = Gson()
+            var testModel = gson.fromJson(result, NewsSource::class.java)
+
+            val listNews = testModel.data
+
+            updateLocalDB(listNews, category, language, object : ICallbackResultBoolean {
+                override fun onResultCallback(_result: Boolean) {
+                    callbackResult.onResultCallback(_result)
+                }
+
+                override fun onErrorCallback(_result: String) {
+                    callbackResult.onErrorCallback("flag: error in porcess get from repository!!!")
+                }
+            })
+        }
+
+
 //                    LOG_TAG, throwable.message.toString()
 //                )
 //            })
 
-        callbackResult.onResultCallback(result)
+
     }
 
     fun updateLocalDB(
@@ -86,22 +109,41 @@ class NewsRepository
         callbackResult: ICallbackResultBoolean
     ) {
 
+        Log.d(LOG_TAG, "Update DB")
+
         deleteFromLocalDB(category, language)
-        saveToLocalDB(news)
 
-        callbackResult.onResultCallback(true)
+        Log.d(LOG_TAG, "Delete DB")
 
+        saveToLocalDB(news, object : ICallbackResultBoolean {
+            override fun onResultCallback(_result: Boolean) {
+                callbackResult.onResultCallback(true)
+            }
+
+            override fun onErrorCallback(_result: String) {
+                Log.d(LOG_TAG, _result)
+            }
+        })
     }
 
-    fun saveToLocalDB(news: List<News>) {
+    fun deleteFromLocalDB(category: String, language: String) =
+        ioThread { newsDao.deleteNews(category, language) }
+
+    fun saveToLocalDB(news: List<News>, callbackResult: ICallbackResultBoolean) {
+
+        Log.d(LOG_TAG, "Save new news in DB")
+
+
         Completable.fromAction(Action { newsDao.insertNews(news) })
             .subscribeOn(Schedulers.io())
-            .subscribe()
-        Log.d(LOG_TAG, "insert")
-    }
-
-    fun deleteFromLocalDB(category: String, language: String) {
-        newsDao.deleteNews(category, language)
-        Log.d(LOG_TAG, "delete")
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe({
+                Log.d(LOG_TAG, "Data save in Local DB")
+                callbackResult.onResultCallback(true)
+            },
+                { error ->
+                    //Log.d(LOG_TAG, error.toString())
+                    callbackResult.onErrorCallback("Error..........!!!!!!!!!!!!!!")
+                })
     }
 }
