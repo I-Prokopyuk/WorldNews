@@ -7,7 +7,7 @@
     <string name="category_name_science">Science</string>
     <string name="category_name_sports">Sports</string>
     <string name="category_name_technology">Technology</string>
-    <string name="info_no_data">No articles in this category!</string>
+    <string name="info_no_data">Oops! Something went wrong, network error...</string>
     <string name="info_no_connection">Network error, offline mode!</string>
     <string name="snackbar_text">Internet connection!</string>
     <string name="snackbar_action_text">Update</string>

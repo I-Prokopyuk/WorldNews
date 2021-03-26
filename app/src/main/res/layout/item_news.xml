@@ -32,10 +32,10 @@
                 android:progressView="@{progressBar}"
                 android:scaleType="centerCrop"
                 android:src="@{item.image}"
+                android:visibility="@{item.image!=null ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                android:visibility="@{item.image!=null ? View.VISIBLE : View.GONE}"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -76,7 +76,7 @@
                 android:alpha="@dimen/news_text_background_alpha"
                 android:background="@color/purple_700"
                 android:padding="@dimen/news_text_padding"
-                android:text="@{item.category}"
+                android:text='@{item.author + " | " + item.id}'
                 android:textColor="@color/white"
                 android:textSize="@dimen/news_title_font_size"
                 android:textStyle="bold"

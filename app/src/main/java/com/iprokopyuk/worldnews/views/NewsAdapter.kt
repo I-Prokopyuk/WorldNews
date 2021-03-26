@@ -36,8 +36,7 @@ class NewsAdapter : PagedListAdapter<News, ModelViewHolder>(DIFF_CALLBACK) {
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<News>() {
             override fun areItemsTheSame(oldItem: News, newItem: News) = oldItem.id == newItem.id
-            override fun areContentsTheSame(oldItem: News, newItem: News) =
-                oldItem.title.equals(newItem.title)
+            override fun areContentsTheSame(oldItem: News, newItem: News) = oldItem == newItem
         }
     }
 }

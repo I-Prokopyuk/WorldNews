@@ -1,5 +1,6 @@
 package com.iprokopyuk.worldnews.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
@@ -8,10 +9,7 @@ import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.repository.NewsRepository
 import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import com.iprokopyuk.worldnews.models.News
-import com.iprokopyuk.worldnews.utils.DEFAULT_CATEGORY
-import com.iprokopyuk.worldnews.utils.DEFAULT_LANGUAGE
-import com.iprokopyuk.worldnews.utils.ICallbackResultBoolean
-import com.iprokopyuk.worldnews.utils.NotNullMutableLiveData
+import com.iprokopyuk.worldnews.utils.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
@@ -50,10 +48,10 @@ class NewsViewModel @Inject constructor(
     val refreshing: NotNullMutableLiveData<Boolean>
         get() = _refreshing
 
-    var _items: NotNullMutableLiveData<LiveData<PagedList<News>>?> = NotNullMutableLiveData(null)
+    private var _items: NotNullMutableLiveData<LiveData<PagedList<News>>?> =
+        NotNullMutableLiveData(newLivePagedListBuilder())
     val items: NotNullMutableLiveData<LiveData<PagedList<News>>?>
         get() = _items
-
 
     var callbackResultNews = CallbackResultNews()
 
@@ -61,38 +59,65 @@ class NewsViewModel @Inject constructor(
 
     fun getNews(_category: String, _language: String) {
 
-        _refreshing.value = true
+        newLivePagedListBuilder().
 
-        category = _category
-        language = _language
+        when (internetConnection.value) {
+            true -> {
 
-        if (internetConnection.value == true) {
+                Log.d(LOG_TAG, "Internet - true...................<<<<<<<<<<<<<<<<<<<<")
 
-            newsRepository.getNews(category, language, callbackResultNews)
+                _refreshing.value = true
 
-        } else {
+                newsRepository.gettttNews(_category, _language, callbackResultNews)
+            }
+            false -> {
 
-            _items.value = getLivePagedListBuilder()
+                Log.d(LOG_TAG, "Internet - false.......................<<<<<<<<<<<<<<<<<<")
 
+                updatePagedList(_category, _language)
+
+                _refreshing.value = false
+            }
+        }
+
+    }
+
+    inner class CallbackResultNews : ICallbackResultBoolean {
+        override fun onDataAvailable() {
+            TODO("Not yet implemented")
+        }
+
+        override fun onDataAvailable(_category: String, _language: String) {
+            updatePagedList(_category, _language)
             _refreshing.value = false
+        }
+
+        override fun onDataNotAvailable() {
+            _refreshing.value = false
+        }
+
+    }
+
+    fun updatePagedList(_category: String, _language: String) {
+
+        Log.d(LOG_TAG, category + " " + language + " category language <<<<<<<<<<<<")
+
+        Log.d(LOG_TAG, _category + " " + _language + " _category _language <<<<<<<<<<<<")
+
+        if (!_category.equals(category) || !_language.equals(language)) {
+
+            Log.d(LOG_TAG, "Update......................")
+
+            category = _category
+            language = _language
+
+            _items.value = newLivePagedListBuilder()
+
         }
     }
 
-    fun getLivePagedListBuilder() = LivePagedListBuilder(
+    fun newLivePagedListBuilder() = LivePagedListBuilder(
         newsDao.getNews(category, language),
         3
     ).build()
-
-    inner class CallbackResultNews : ICallbackResultBoolean {
-        override fun onResultCallback(_result: Boolean) {
-
-            _items.value = getLivePagedListBuilder()
-
-            _refreshing.value = false
-        }
-
-        override fun onErrorCallback(_error: String) {
-            _refreshing.value = false
-        }
-    }
 }

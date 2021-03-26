@@ -20,23 +20,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent">
 
-        <include
-            layout="@layout/content_news"
-            android:layout_width="0dp"
-            android:layout_height="600dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/viewPager"
-            app:vm="@{vm}" />
-
         <LinearLayout
             android:id="@+id/container_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
-            android:visibility="gone"
+            android:visibility="@{safeUnbox(vm.items.size()) == 0 ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,6 +46,16 @@
                 android:padding="@dimen/news_text_padding"
                 android:text="@string/info_no_data" />
         </LinearLayout>
+
+        <include
+            layout="@layout/content_news"
+            android:layout_width="0dp"
+            android:layout_height="600dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewPager"
+            app:vm="@{vm}" />
 
         <View
             android:id="@+id/view"

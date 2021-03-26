@@ -49,25 +49,26 @@ fun SwipeRefreshLayout.refreshing(visible: Boolean) {
 @BindingAdapter("news")
 fun setNews(view: RecyclerView, items: PagedList<News>?) {
 
-    Log.d(LOG_TAG, "set submitList for adapter")
+    if (items != null) {
 
 
-    //  if (items != null) {
 
-    view.adapter?.run {
+        Log.d(LOG_TAG, "set submitList for adapter")
 
-        if (this is NewsAdapter) {
-            this.submitList(items)
-            Log.d(LOG_TAG, "adapter old")
+        view.adapter?.run {
+
+            if (this is NewsAdapter) {
+                this.submitList(items)
+                Log.d(LOG_TAG, "adapter old")
+            }
+        } ?: run {
+            Log.d(LOG_TAG, "adapter new")
+            NewsAdapter().apply {
+                view.adapter = this
+                this.submitList(items)
+            }
+        }
     }
-} ?: run {
-    Log.d(LOG_TAG, "adapter new")
-    NewsAdapter().apply {
-        view.adapter = this
-        this.submitList(items)
-    }
-}
-//  }
 }
 
 @BindingAdapter("android:src", "android:progressView")

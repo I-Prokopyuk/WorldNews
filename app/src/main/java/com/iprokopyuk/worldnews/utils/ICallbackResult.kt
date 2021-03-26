@@ -2,6 +2,7 @@ package com.iprokopyuk.worldnews.utils
 
 interface ICallbackResultBoolean {
 
-    fun onResultCallback(_result: Boolean)
-    fun onErrorCallback(_result: String)
+    fun onDataAvailable()
+    fun onDataAvailable(_category: String, _language: String)
+    fun onDataNotAvailable()
 }
