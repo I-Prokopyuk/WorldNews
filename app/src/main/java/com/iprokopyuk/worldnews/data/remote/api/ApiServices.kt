@@ -11,6 +11,8 @@ interface ApiServices {
     fun getNews(
         @Query("access_key") key: String,
         @Query("categories") categories: String,
-        @Query("languages") languages: String
-    ): Single<List<NewsSource>>
+        @Query("languages") languages: String,
+        @Query("offset") offset: Int,
+        @Query("limit") limit: Int
+    ): Single<NewsSource>
 }

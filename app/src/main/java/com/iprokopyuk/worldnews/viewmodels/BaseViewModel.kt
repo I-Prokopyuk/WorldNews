@@ -1,7 +1,6 @@
 package com.iprokopyuk.worldnews.viewmodels
 
 import androidx.lifecycle.ViewModel
-import androidx.paging.LivePagedListBuilder
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import javax.inject.Inject

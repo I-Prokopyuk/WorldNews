@@ -1,4 +1,4 @@
-package com.iprokopyuk.worldnews.viewmodels
+package com.iprokopyuk.worldnews.aiewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,14 +7,13 @@ import androidx.paging.PagedList
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.repository.NewsRepository
-import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.utils.*
+import com.iprokopyuk.worldnews.viewmodels.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-@AppScoped
 class NewsViewModel @Inject constructor(
     private val newsDao: NewsDao,
     private val newsRepository: NewsRepository
@@ -24,6 +23,8 @@ class NewsViewModel @Inject constructor(
     var category: String
     var language: String
     var connectionCheck: Boolean = false
+    private val boundaryCallback = NewsBoundaryCallback()
+    private val callbackResultNews = CallbackResultNews()
 
 
     init {
@@ -53,13 +54,14 @@ class NewsViewModel @Inject constructor(
     val items: NotNullMutableLiveData<LiveData<PagedList<News>>?>
         get() = _items
 
-    var callbackResultNews = CallbackResultNews()
 
     fun getRefresh() = getNews(category, language)
 
+    fun getNewsFromRepository(_category: String, _language: String) =
+        newsRepository.getNews(_category, _language, callbackResultNews)
+
     fun getNews(_category: String, _language: String) {
 
-        newLivePagedListBuilder().
 
         when (internetConnection.value) {
             true -> {
@@ -68,7 +70,8 @@ class NewsViewModel @Inject constructor(
 
                 _refreshing.value = true
 
-                newsRepository.gettttNews(_category, _language, callbackResultNews)
+                getNewsFromRepository(_category, _language)
+
             }
             false -> {
 
@@ -78,22 +81,6 @@ class NewsViewModel @Inject constructor(
 
                 _refreshing.value = false
             }
-        }
-
-    }
-
-    inner class CallbackResultNews : ICallbackResultBoolean {
-        override fun onDataAvailable() {
-            TODO("Not yet implemented")
-        }
-
-        override fun onDataAvailable(_category: String, _language: String) {
-            updatePagedList(_category, _language)
-            _refreshing.value = false
-        }
-
-        override fun onDataNotAvailable() {
-            _refreshing.value = false
         }
 
     }
@@ -116,8 +103,36 @@ class NewsViewModel @Inject constructor(
         }
     }
 
-    fun newLivePagedListBuilder() = LivePagedListBuilder(
-        newsDao.getNews(category, language),
-        3
-    ).build()
+    fun newLivePagedListBuilder() =
+        LivePagedListBuilder(newsDao.getNews(category, language), PAGE_SIZE).setBoundaryCallback(
+            boundaryCallback
+        ).build()
+
+    inner class CallbackResultNews : ICallbackResultBoolean {
+        override fun onDataAvailable() {
+            TODO("Not yet implemented")
+        }
+
+        override fun onDataAvailable(_category: String, _language: String) {
+            updatePagedList(_category, _language)
+            _refreshing.value = false
+        }
+
+        override fun onDataNotAvailable() {
+            _refreshing.value = false
+        }
+
+    }
+
+    inner class NewsBoundaryCallback : PagedList.BoundaryCallback<News>() {
+
+        override fun onItemAtEndLoaded(itemAtEnd: News) {
+            super.onItemAtEndLoaded(itemAtEnd)
+
+            Log.d(LOG_TAG, "Return end data  {{{{{{{{{{{{{{{{{{{{{{{")
+
+            getNewsFromRepository(category, language)
+        }
+    }
+
 }

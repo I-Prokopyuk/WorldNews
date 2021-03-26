@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 @Module(includes = [ActivityBindingModule::class])
 class AppModule {
-    //
+
     @AppScoped
     @Provides
     fun provideContext(app: Application): Context = app.applicationContext

@@ -3,7 +3,7 @@ package com.iprokopyuk.worldnews.views.base
 import android.view.View
 import android.widget.Toast
 import com.google.android.material.snackbar.Snackbar
-import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
+import com.iprokopyuk.worldnews.aiewmodels.NewsViewModel
 import dagger.android.support.DaggerAppCompatActivity
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject

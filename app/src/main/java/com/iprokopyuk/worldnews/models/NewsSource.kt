@@ -4,6 +4,6 @@ import com.google.gson.annotations.SerializedName
 
 data class NewsSource(
 
-    @SerializedName("pagination") var pagination: Pagination,
-    @SerializedName("data") var data: List<News> = emptyList()
+    @SerializedName("pagination") val pagination: Pagination?,
+    @SerializedName("data") val data: ArrayList<News>?
 )

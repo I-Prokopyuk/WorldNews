@@ -35,6 +35,9 @@ internal const val DEFAULT_LANGUAGE = "en"
 //LOG
 internal const val LOG_TAG = "myLogs"
 
+//Config pagedList
+internal const val PAGE_SIZE = 10
+
 
 @BindingAdapter("imageResource")
 fun setImageResource(imageView: ImageView, resource: Int) {
@@ -50,7 +53,6 @@ fun SwipeRefreshLayout.refreshing(visible: Boolean) {
 fun setNews(view: RecyclerView, items: PagedList<News>?) {
 
     if (items != null) {
-
 
 
         Log.d(LOG_TAG, "set submitList for adapter")
@@ -78,7 +80,7 @@ fun setImageWithPicasso(imageView: ImageView, url: String?, progressBar: Progres
 
         progressBar.visibility = View.VISIBLE
 
-        Picasso.get().load(url).into(imageView, object : Callback {
+        Picasso.get().load(it).into(imageView, object : Callback {
             override fun onSuccess() {
                 progressBar.visibility = View.GONE
             }

@@ -1,13 +1,15 @@
 package com.iprokopyuk.worldnews.data.repository
 
 import android.util.Log
-import com.google.gson.Gson
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.remote.api.ApiServices
+import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import com.iprokopyuk.worldnews.models.News
-import com.iprokopyuk.worldnews.models.NewsSource
+import com.iprokopyuk.worldnews.models.Pagination
+import com.iprokopyuk.worldnews.utils.API_KEY
 import com.iprokopyuk.worldnews.utils.ICallbackResultBoolean
 import com.iprokopyuk.worldnews.utils.LOG_TAG
+import com.iprokopyuk.worldnews.utils.PAGE_SIZE
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.functions.Action
@@ -19,12 +21,17 @@ class NewsRepository
     private val newsDao: NewsDao,
     private val apiServices: ApiServices,
 ) {
-    fun gettttNews(
+    lateinit var pagination: Pagination
+
+    //Default pagination
+    private var paginationOffset = 0
+    private val paginationLimit = PAGE_SIZE
+
+    fun getNews(
         category: String,
         language: String,
         callbackResult: ICallbackResultBoolean
     ) {
-
         val result = """{
     "pagination": {
         "limit": 100,
@@ -93,44 +100,60 @@ class NewsRepository
         }
     ]
 }"""
+        pagination?.run {
 
-        //apiServices.getNews(API_KEY, "sports", "en")
-//            .subscribeOn(Schedulers.io())
-//            .observeOn(AndroidSchedulers.mainThread())
-//            .unsubscribeOn(Schedulers.io())
-//            .retry(2)
-//            .subscribe({ listNews -> Log.d(LOG_TAG, listNews.toString()) }, { throwable ->
-//                Log.d(
+            paginationOffset = this.count
 
-        if (result != null) {
-
-            Log.d(LOG_TAG, category + " | " + language)
-
-            var gson = Gson()
-            var testModel = gson.fromJson(result, NewsSource::class.java)
-
-            val listNews = testModel.data
-
-            updateLocalDB(category, language, listNews, object : ICallbackResultBoolean {
-                override fun onDataAvailable() {
-                    onDataAvailable(category, language)
-                }
-
-                override fun onDataAvailable(_category: String, _language: String) {
-                    callbackResult.onDataAvailable(_category, _language)
-
-                }
-
-                override fun onDataNotAvailable() {
-                    callbackResult.onDataNotAvailable()
-                }
-            })
         }
 
+        apiServices.getNews(API_KEY, category, language, paginationOffset, paginationLimit)
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .unsubscribeOn(Schedulers.io())
+            .retry(2)
+            .subscribe({ response ->
 
-//                    LOG_TAG, throwable.message.toString()
-//                )
-//            })
+                if (response.pagination != null && response.data != null) {
+
+                    pagination = response.pagination
+
+                    updateLocalDB(
+                        category,
+                        language,
+                        response.data,
+                        object : ICallbackResultBoolean {
+                            override fun onDataAvailable() {
+                                onDataAvailable(category, language)
+                            }
+
+                            override fun onDataAvailable(_category: String, _language: String) {
+                                callbackResult.onDataAvailable(_category, _language)
+
+                            }
+
+                            override fun onDataNotAvailable() {
+                                callbackResult.onDataNotAvailable()
+                            }
+                        })
+                }
+
+            },
+                { throwable ->
+                    Log.d(LOG_TAG, throwable.message.toString())
+                    callbackResult.onDataNotAvailable()
+
+                })
+
+
+//        if (result != null) {
+//
+//            Log.d(LOG_TAG, category + " | " + language)
+//
+//            var gson = Gson()
+//            var testModel = gson.fromJson(result, NewsSource::class.java)
+//
+//
+//        }
 
 
     }
