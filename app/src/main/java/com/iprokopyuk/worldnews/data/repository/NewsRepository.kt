@@ -3,7 +3,6 @@ package com.iprokopyuk.worldnews.data.repository
 import android.util.Log
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.remote.api.ApiServices
-import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.models.Pagination
 import com.iprokopyuk.worldnews.utils.API_KEY
@@ -21,7 +20,7 @@ class NewsRepository
     private val newsDao: NewsDao,
     private val apiServices: ApiServices,
 ) {
-    lateinit var pagination: Pagination
+    var pagination: Pagination? = null
 
     //Default pagination
     private var paginationOffset = 0
@@ -106,6 +105,8 @@ class NewsRepository
 
         }
 
+
+
         apiServices.getNews(API_KEY, category, language, paginationOffset, paginationLimit)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -135,11 +136,11 @@ class NewsRepository
                                 callbackResult.onDataNotAvailable()
                             }
                         })
-                }
+                } else callbackResult.onDataNotAvailable()
 
             },
                 { throwable ->
-                    Log.d(LOG_TAG, throwable.message.toString())
+                    Log.d(LOG_TAG, "Error: " + throwable.message.toString())
                     callbackResult.onDataNotAvailable()
 
                 })

@@ -1,4 +1,4 @@
-package com.iprokopyuk.worldnews.aiewmodels
+package com.iprokopyuk.worldnews.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,13 +7,14 @@ import androidx.paging.PagedList
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.repository.NewsRepository
+import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.utils.*
-import com.iprokopyuk.worldnews.viewmodels.BaseViewModel
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+@AppScoped
 class NewsViewModel @Inject constructor(
     private val newsDao: NewsDao,
     private val newsRepository: NewsRepository
@@ -131,8 +132,7 @@ class NewsViewModel @Inject constructor(
 
             Log.d(LOG_TAG, "Return end data  {{{{{{{{{{{{{{{{{{{{{{{")
 
-            getNewsFromRepository(category, language)
+            getNews(category, language)
         }
     }
-
 }
