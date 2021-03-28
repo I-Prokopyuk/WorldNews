@@ -10,6 +10,8 @@ import com.iprokopyuk.worldnews.views.base.BaseActivity
 
 class NewsActivity : BaseActivity() {
 
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 

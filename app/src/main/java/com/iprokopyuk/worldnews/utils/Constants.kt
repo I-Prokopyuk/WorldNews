@@ -54,6 +54,7 @@ fun setNews(view: RecyclerView, items: PagedList<News>?) {
 
     if (items != null) {
 
+        Log.d(LOG_TAG, items.size.toString() + "<<<<<<< SIZE <<<<<<<<<")
 
         Log.d(LOG_TAG, "set submitList for adapter")
 

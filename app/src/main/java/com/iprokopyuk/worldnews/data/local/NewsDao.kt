@@ -11,7 +11,7 @@ interface NewsDao {
     fun getNews(category: String, language: String): DataSource.Factory<Int, News>
 
     @Transaction
-    fun deleteAndCreate(category: String, language: String, listNews: List<News>) {
+    fun deleteAndInsert(category: String, language: String, listNews: List<News>) {
         deleteNews(category, language)
         insertNews(listNews)
     }
