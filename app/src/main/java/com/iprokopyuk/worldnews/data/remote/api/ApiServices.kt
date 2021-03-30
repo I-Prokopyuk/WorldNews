@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface ApiServices {
 
-    @GET("/v1/news?")
+    @GET("/v1/news?sort=published_desc&")
     fun getNews(
         @Query("access_key") key: String,
         @Query("categories") categories: String,

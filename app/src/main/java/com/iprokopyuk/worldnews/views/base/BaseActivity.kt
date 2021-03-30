@@ -14,7 +14,7 @@ abstract class BaseActivity : DaggerAppCompatActivity() {
 
     fun showSnackbar(text: String, textAction: String) {
         val snackbar = Snackbar.make(
-            container_info,
+            linearLayout,
             text,
             Snackbar.LENGTH_LONG
         )

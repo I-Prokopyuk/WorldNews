@@ -20,5 +20,5 @@ interface NewsDao {
     abstract fun deleteNews(category: String, language: String)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insertNews(listNews: List<News>): List<Long>
+    fun insertNews(listNews: List<News>)
 }

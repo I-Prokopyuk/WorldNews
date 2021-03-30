@@ -4,15 +4,13 @@ import android.util.Log
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.remote.api.ApiServices
 import com.iprokopyuk.worldnews.models.News
-import com.iprokopyuk.worldnews.models.Pagination
 import com.iprokopyuk.worldnews.utils.API_KEY
 import com.iprokopyuk.worldnews.utils.ICallbackResultBoolean
 import com.iprokopyuk.worldnews.utils.LOG_TAG
 import com.iprokopyuk.worldnews.utils.PAGE_SIZE
-import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.functions.Action
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -21,17 +19,14 @@ class NewsRepository
     private val newsDao: NewsDao,
     private val apiServices: ApiServices,
 ) {
-    var pagination: Pagination? = null
-
     //Default pagination
-    private var paginationOffset = 0
-    private val paginationLimit = PAGE_SIZE
+    private var paginationOffset: Int = 0
+    private var paginationLimit: Int = 0
 
     var clearCache: Boolean = false
     lateinit var category: String
     lateinit var language: String
     lateinit var callbackResultViewModel: ICallbackResultBoolean
-    lateinit var listNews: List<News>
 
     private val callbackResultInRepository = CallbackResultNews()
 
@@ -53,14 +48,19 @@ class NewsRepository
         _listNews: List<News>
     ) = newsDao.deleteAndInsert(_category, _language, _listNews)
 
+
     fun actionInsertToLocalDB(_listNews: List<News>) = newsDao.insertNews(_listNews)
 
-    fun completableFromAction(action: () -> Unit, callbackResult: ICallbackResultBoolean) {
-        Completable.fromAction(Action { action })
+
+    fun completableFromAction(
+        action: () -> Unit,
+        callbackResult: ICallbackResultBoolean
+    ): Disposable {
+        return Completable.fromAction(action)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.d(LOG_TAG, "News update in Local DB")
+                Log.d(LOG_TAG, "News update or insert Local DB")
                 callbackResult.onDataAvailable()
             },
                 { error ->
@@ -68,7 +68,6 @@ class NewsRepository
                     callbackResult.onDataNotAvailable()
                 })
     }
-
 
     fun getNews(
         _clearCache: Boolean,
@@ -85,6 +84,11 @@ class NewsRepository
         when (_internetConnection) {
             true -> {
                 Log.d(LOG_TAG, "Internet true")
+                Log.d(LOG_TAG, "ClearCache === " + clearCache)
+                if (clearCache) {
+                    paginationOffset = 0
+                    paginationLimit = PAGE_SIZE
+                }
                 getData()
             }
             false -> {
@@ -96,38 +100,49 @@ class NewsRepository
 
     fun getData() {
 
-        pagination?.run {
-
-            paginationOffset = this.count
-
-        }
+        Log.d(
+            LOG_TAG,
+            paginationOffset.toString() + " " + paginationLimit.toString() + " <<<< SELECT"
+        )
 
         getSingleApi(category, language, paginationOffset, paginationLimit)
             .subscribe({ response ->
 
                 if (response.pagination != null && response.data != null) {
 
-                    pagination = response.pagination
+                    paginationOffset += paginationLimit
 
-                    listNews = response.data
+                    (response.pagination.total - paginationOffset)?.also {
 
-                    Log.d(LOG_TAG, listNews.toString())
+                        if (it < paginationLimit) paginationLimit = it
+                    }
+
+
+                    Log.d(LOG_TAG, response.data.toString())
 
                     if (clearCache) {
 
-                        Log.d(LOG_TAG, category + " "+language)
+                        Log.d(LOG_TAG, category + " " + language)
+
+                        Log.d(LOG_TAG, "!!!!!!!!!!!!! Delete And Insert   !!!!!!!!!!!!")
 
                         completableFromAction({
-                        actionDeleteAndInsertToLocalDB(
-                            category,
-                            language,
-                            listNews
-                        )
-                    }, callbackResultInRepository)} else
+                            actionDeleteAndInsertToLocalDB(
+                                category,
+                                language,
+                                response.data
+                            )
+                        }, callbackResultInRepository)
+
+                    } else {
+
+                        Log.d(LOG_TAG, "!!!!!!!!!!!!! Insert   !!!!!!!!!!!!")
+
                         completableFromAction(
-                            { actionInsertToLocalDB(listNews) },
-                            callbackResultInRepository
+                            { actionInsertToLocalDB(response.data) }, callbackResultInRepository
                         )
+
+                    }
 
                 } else callbackResultViewModel.onDataNotAvailable()
 
@@ -150,7 +165,6 @@ class NewsRepository
         }
     }
 }
-
 
 val result = """{
     "pagination": {

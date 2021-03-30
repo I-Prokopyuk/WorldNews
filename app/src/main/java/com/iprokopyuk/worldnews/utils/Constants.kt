@@ -9,16 +9,18 @@ import androidx.databinding.BindingAdapter
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.views.NewsAdapter
 import com.squareup.picasso.Callback
+import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
 
 //API
 internal const val API_BASE_URL = "http://api.mediastack.com"
-internal const val API_KEY = "c201076c808cf73820ebd0af73947373"
+internal const val API_KEY = "a39c5d527c17e3385bd2b992abb0e238"
 
 //DB
 internal const val DB_VERSION = 1;
@@ -36,7 +38,7 @@ internal const val DEFAULT_LANGUAGE = "en"
 internal const val LOG_TAG = "myLogs"
 
 //Config pagedList
-internal const val PAGE_SIZE = 10
+internal const val PAGE_SIZE = 15
 
 
 @BindingAdapter("imageResource")
@@ -81,15 +83,21 @@ fun setImageWithPicasso(imageView: ImageView, url: String?, progressBar: Progres
 
         progressBar.visibility = View.VISIBLE
 
-        Picasso.get().load(it).into(imageView, object : Callback {
-            override fun onSuccess() {
-                progressBar.visibility = View.GONE
-            }
+        Picasso.get()
+            .load(it)
+            .fit()
+            .centerInside()
+            .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+            .into(imageView, object : Callback {
+                override fun onSuccess() {
+                    progressBar.visibility = View.GONE
+                }
 
-            override fun onError(e: Exception?) {
-            }
+                override fun onError(e: Exception?) {
+                    progressBar.visibility = View.GONE
+                }
 
-        })
+            })
     }
 }
 

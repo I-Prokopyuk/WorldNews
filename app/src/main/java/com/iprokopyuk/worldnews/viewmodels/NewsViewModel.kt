@@ -47,7 +47,7 @@ class NewsViewModel @Inject constructor(
     val internetConnection: NotNullMutableLiveData<Boolean>
         get() = _internetConnection
 
-    private val _refreshing: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(false)
+    private var _refreshing: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(false)
     val refreshing: NotNullMutableLiveData<Boolean>
         get() = _refreshing
 
@@ -56,14 +56,18 @@ class NewsViewModel @Inject constructor(
     val items: NotNullMutableLiveData<LiveData<PagedList<News>>?>
         get() = _items
 
+    private var _containerWithInformation: NotNullMutableLiveData<Boolean> =
+        NotNullMutableLiveData(false)
+    val containerWithInformation: NotNullMutableLiveData<Boolean>
+        get() = _containerWithInformation
+
     fun getRefresh() = getNews(category, language)
 
     fun getNews(_category: String, _language: String) {
 
         _refreshing.value = true
 
-        updatePagedList =
-            if (!_category.equals(category) || !_language.equals(language)) true else false
+        updatePagedList = if (!_category.equals(category) || !_language.equals(language)) true else false
 
         category = _category
         language = _language
@@ -113,12 +117,14 @@ class NewsViewModel @Inject constructor(
             }
 
             _refreshing.value = false
+            _containerWithInformation.value = false
 
-            Log.d(LOG_TAG, "Data Available <<<<<<<")
+            Log.d(LOG_TAG, "2 Data Available <<<<<<<")
         }
 
         override fun onDataNotAvailable() {
             _refreshing.value = false
+            _containerWithInformation.value = true
 
             Log.d(LOG_TAG, "Data Not Available")
         }
