@@ -81,6 +81,8 @@ class NewsRepository
         language = _language
         callbackResultViewModel = _callbackResult
 
+        Log.d(LOG_TAG, category + " " + language + "$$$$$$$$$$$$$$$$$$$$$$")
+
         when (_internetConnection) {
             true -> {
                 Log.d(LOG_TAG, "Internet true")
@@ -108,6 +110,10 @@ class NewsRepository
         getSingleApi(category, language, paginationOffset, paginationLimit)
             .subscribe({ response ->
 
+                if (response.data?.size == 0) callbackResultViewModel.onDataNotAvailable()
+
+                Log.d(LOG_TAG, "......................Further...................")
+
                 if (response.pagination != null && response.data != null) {
 
                     paginationOffset += paginationLimit
@@ -118,7 +124,7 @@ class NewsRepository
                     }
 
 
-                    Log.d(LOG_TAG, response.data.toString())
+                    Log.d(LOG_TAG, response.data.toString() + "Respone <<<<<<<<<")
 
                     if (clearCache) {
 

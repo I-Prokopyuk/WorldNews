@@ -71,15 +71,16 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_gravity="top"
-            android:layout_marginTop="68dp"
+            android:layout_marginTop="10dp"
             android:orientation="horizontal"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
             tools:ignore="MissingConstraints" />
 
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:gravity="center"
             android:orientation="horizontal"
             app:layout_constraintEnd_toEndOf="parent"
@@ -88,12 +89,12 @@
 
             <ImageButton
                 android:id="@+id/button_lang_usa"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="15dp"
+                android:layout_width="@dimen/category_ImageButton_width_height"
+                android:layout_height="@dimen/category_ImageButton_width_height"
+                android:layout_margin="@dimen/category_ImageButton_margin"
                 android:background="@drawable/button_image_selector"
                 android:onClick='@{() -> vm.getNews(vm.category,"en")}'
-                android:padding="8dp"
+                android:padding="@dimen/category_ImageButton_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/flag_usa"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -102,11 +103,12 @@
 
             <ImageButton
                 android:id="@+id/button_lang_germany"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="15dp"
+                android:layout_width="@dimen/category_ImageButton_width_height"
+                android:layout_height="@dimen/category_ImageButton_width_height"
+                android:layout_margin="@dimen/category_ImageButton_margin"
                 android:background="@drawable/button_image_selector"
-                android:padding="8dp"
+                android:onClick='@{() -> vm.getNews(vm.category,"de")}'
+                android:padding="@dimen/category_ImageButton_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/flag_germany"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -115,11 +117,12 @@
 
             <ImageButton
                 android:id="@+id/button_lang_russia"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="15dp"
+                android:layout_width="@dimen/category_ImageButton_width_height"
+                android:layout_height="@dimen/category_ImageButton_width_height"
+                android:layout_margin="@dimen/category_ImageButton_margin"
                 android:background="@drawable/button_image_selector"
-                android:padding="8dp"
+                android:onClick='@{() -> vm.getNews(vm.category,"ru")}'
+                android:padding="@dimen/category_ImageButton_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/flag_russia"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -127,14 +130,29 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/button_setting"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_margin="15dp"
+                android:id="@+id/button_lang_spanish"
+                android:layout_width="@dimen/category_ImageButton_width_height"
+                android:layout_height="@dimen/category_ImageButton_width_height"
+                android:layout_margin="@dimen/category_ImageButton_margin"
                 android:background="@drawable/button_image_selector"
-                android:padding="10dp"
+                android:onClick='@{() -> vm.getNews(vm.category,"es")}'
+                android:padding="@dimen/category_ImageButton_padding"
                 android:scaleType="fitCenter"
-                android:src="@drawable/ic_baseline_settings"
+                android:src="@drawable/flag_spain"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_lang_french"
+                android:layout_width="@dimen/category_ImageButton_width_height"
+                android:layout_height="@dimen/category_ImageButton_width_height"
+                android:layout_margin="@dimen/category_ImageButton_margin"
+                android:background="@drawable/button_image_selector"
+                android:onClick='@{() -> vm.getNews(vm.category,"fr")}'
+                android:padding="@dimen/category_ImageButton_padding"
+                android:scaleType="fitCenter"
+                android:src="@drawable/flag_france"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

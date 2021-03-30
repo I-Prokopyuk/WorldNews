@@ -9,7 +9,6 @@ import androidx.databinding.BindingAdapter
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.views.NewsAdapter
 import com.squareup.picasso.Callback
@@ -38,7 +37,7 @@ internal const val DEFAULT_LANGUAGE = "en"
 internal const val LOG_TAG = "myLogs"
 
 //Config pagedList
-internal const val PAGE_SIZE = 15
+internal const val PAGE_SIZE = 3
 
 
 @BindingAdapter("imageResource")

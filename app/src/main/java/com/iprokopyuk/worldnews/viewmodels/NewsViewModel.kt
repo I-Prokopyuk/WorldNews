@@ -51,9 +51,9 @@ class NewsViewModel @Inject constructor(
     val refreshing: NotNullMutableLiveData<Boolean>
         get() = _refreshing
 
-    private var _items: NotNullMutableLiveData<LiveData<PagedList<News>>?> =
+    private var _items: NotNullMutableLiveData<LiveData<PagedList<News>>> =
         NotNullMutableLiveData(getNewLivePagedListBuilder())
-    val items: NotNullMutableLiveData<LiveData<PagedList<News>>?>
+    val items: NotNullMutableLiveData<LiveData<PagedList<News>>>
         get() = _items
 
     private var _containerWithInformation: NotNullMutableLiveData<Boolean> =
@@ -67,7 +67,8 @@ class NewsViewModel @Inject constructor(
 
         _refreshing.value = true
 
-        updatePagedList = if (!_category.equals(category) || !_language.equals(language)) true else false
+        updatePagedList =
+            if (!_category.equals(category) || !_language.equals(language)) true else false
 
         category = _category
         language = _language
@@ -81,7 +82,7 @@ class NewsViewModel @Inject constructor(
         ).build()
 
     fun onUpdatePagedList() {
-        _items.value = getNewLivePagedListBuilder()
+        if (updatePagedList) _items.value = getNewLivePagedListBuilder()
     }
 
     inner class NewsBoundaryCallback : PagedList.BoundaryCallback<News>() {
@@ -103,26 +104,18 @@ class NewsViewModel @Inject constructor(
 
     inner class CallbackResultNews : ICallbackResultBoolean {
         override fun onDataAvailable() {
-            if (updatePagedList) {
-
-                //onUpdatePagedList()
-
-                _items.value = LivePagedListBuilder(
-                    newsDao.getNews(category, language),
-                    PAGE_SIZE
-                ).setBoundaryCallback(
-                    boundaryCallback
-                ).build()
-
-            }
+            onUpdatePagedList()
 
             _refreshing.value = false
             _containerWithInformation.value = false
 
-            Log.d(LOG_TAG, "2 Data Available <<<<<<<")
+            Log.d(LOG_TAG, "Data Available <<<<<<<")
         }
 
         override fun onDataNotAvailable() {
+
+            onUpdatePagedList()
+
             _refreshing.value = false
             _containerWithInformation.value = true
 

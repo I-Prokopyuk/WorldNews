@@ -3,12 +3,16 @@
     <dimen name="layout_padding">10dp</dimen>
     <dimen name="viewpager_next_item_visible">26dp</dimen>
     <dimen name="viewpager_current_item_horizontal_margin">32dp</dimen>
+    <dimen name="category_ImageButton_width_height">40dp</dimen>
+    <dimen name="category_ImageButton_margin">10dp</dimen>
+    <dimen name="category_ImageButton_padding">8dp</dimen>
     <dimen name="category_font_size">20sp</dimen>
     <dimen name="news_title_font_size">12sp</dimen>
     <dimen name="news_description_font_size">12sp</dimen>
     <dimen name="news_attribute_font_size">11sp</dimen>
-    <dimen name="news_attribute_text_padding">15dp</dimen>
+    <dimen name="news_attribute_text_padding">10dp</dimen>
     <dimen name="news_title_description_text_padding">8dp</dimen>
-    <dimen name="news_text_margin">15dp</dimen>
-    <dimen name="news_text_background_alpha">0.7</dimen>
+    <dimen name="news_text_margin">8dp</dimen>
+    <dimen name="news_text_background_alpha">0.8</dimen>
+    <dimen name="news_image_height">400dp</dimen>
 </resources>
