@@ -9,10 +9,10 @@ import androidx.databinding.BindingAdapter
 import androidx.paging.PagedList
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.views.NewsAdapter
 import com.squareup.picasso.Callback
-import com.squareup.picasso.MemoryPolicy
 import com.squareup.picasso.Picasso
 import java.text.SimpleDateFormat
 import java.util.*
@@ -86,7 +86,8 @@ fun setImageWithPicasso(imageView: ImageView, url: String?, progressBar: Progres
             .load(it)
             .fit()
             .centerInside()
-            .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
+            .error(R.drawable.no_image_2)
+//            .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
             .into(imageView, object : Callback {
                 override fun onSuccess() {
                     progressBar.visibility = View.GONE
@@ -95,7 +96,6 @@ fun setImageWithPicasso(imageView: ImageView, url: String?, progressBar: Progres
                 override fun onError(e: Exception?) {
                     progressBar.visibility = View.GONE
                 }
-
             })
     }
 }

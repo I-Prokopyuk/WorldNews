@@ -1,47 +1,33 @@
 package com.iprokopyuk.worldnews.views
 
 import android.os.Bundle
-import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
+import androidx.lifecycle.LiveData
 import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.databinding.ActivityNewsBinding
 import com.iprokopyuk.worldnews.utils.extensions.initializingCategoryNavigation
+import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
 import com.iprokopyuk.worldnews.views.base.BaseActivity
+import javax.inject.Inject
 
-class NewsActivity : BaseActivity() {
+class NewsActivity : BaseActivity<ActivityNewsBinding>() {
+    @Inject
+    lateinit var newsViewModel: NewsViewModel
 
-
+    override fun getLayoutResId() = R.layout.activity_news
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        var bindingActivity: ActivityNewsBinding =
-            DataBindingUtil.setContentView(this, R.layout.activity_news)
+        binding.vm = newsViewModel
+        binding.setLifecycleOwner(this)
 
         initializingCategoryNavigation(this)
 
-        bindingActivity.vm = newsViewModel
-        bindingActivity.setLifecycleOwner(this)
-
-        newsViewModel.internetConnection.observe(this, Observer { internetConnection ->
-            internetConnection.let {
-                when (it) {
-                    true -> {
-
-                        if (newsViewModel.connectionCheck) {
-                            showSnackbar(
-                                resources.getString(R.string.snackbar_text),
-                                resources.getString(R.string.snackbar_action_text)
-                            )
-                        }
-                    }
-                    false -> {
-                        showToast(resources.getString(R.string.info_no_connection))
-                    }
-                }
-            }
-        })
+        onObserveTointernetConnection({ newsViewModel.getRefresh() })
     }
+
+    override fun getLiveDataInternetConnection(): LiveData<Boolean?> =
+        newsViewModel.internetConnectionStatus
 
 
 }

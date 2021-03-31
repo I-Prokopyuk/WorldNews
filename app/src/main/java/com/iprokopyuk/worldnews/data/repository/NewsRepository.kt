@@ -63,15 +63,15 @@ class NewsRepository
                 Log.d(LOG_TAG, "News update or insert Local DB")
                 callbackResult.onDataAvailable()
             },
-                { error ->
-                    Log.d(LOG_TAG, error.toString())
+                { throwable ->
+                    Log.d(LOG_TAG, "Error: " + throwable.message.toString())
                     callbackResult.onDataNotAvailable()
                 })
     }
 
+
     fun getNews(
         _clearCache: Boolean,
-        _internetConnection: Boolean,
         _category: String,
         _language: String,
         _callbackResult: ICallbackResultBoolean
@@ -81,40 +81,28 @@ class NewsRepository
         language = _language
         callbackResultViewModel = _callbackResult
 
-        Log.d(LOG_TAG, category + " " + language + "$$$$$$$$$$$$$$$$$$$$$$")
-
-        when (_internetConnection) {
-            true -> {
-                Log.d(LOG_TAG, "Internet true")
-                Log.d(LOG_TAG, "ClearCache === " + clearCache)
-                if (clearCache) {
-                    paginationOffset = 0
-                    paginationLimit = PAGE_SIZE
-                }
-                getData()
-            }
-            false -> {
-                Log.d(LOG_TAG, "Not Internet")
-                callbackResultViewModel.onDataNotAvailable()
-            }
+        if (clearCache) {
+            paginationOffset = 0
+            paginationLimit = PAGE_SIZE
         }
+        getData()
     }
 
     fun getData() {
 
-        Log.d(
-            LOG_TAG,
-            paginationOffset.toString() + " " + paginationLimit.toString() + " <<<< SELECT"
-        )
-
         getSingleApi(category, language, paginationOffset, paginationLimit)
-            .subscribe({ response ->
+            .subscribe(
+                { response ->
 
-                if (response.data?.size == 0) callbackResultViewModel.onDataNotAvailable()
+                    if (response == null || response?.pagination == null || response?.data?.size == 0) {
+                        callbackResultViewModel.onDataNotAvailable()
+                        return@subscribe
+                    }
 
-                Log.d(LOG_TAG, "......................Further...................")
-
-                if (response.pagination != null && response.data != null) {
+                    Log.d(
+                        LOG_TAG,
+                        "..................................... Further .............................."
+                    )
 
                     paginationOffset += paginationLimit
 
@@ -123,40 +111,29 @@ class NewsRepository
                         if (it < paginationLimit) paginationLimit = it
                     }
 
-
-                    Log.d(LOG_TAG, response.data.toString() + "Respone <<<<<<<<<")
-
                     if (clearCache) {
 
-                        Log.d(LOG_TAG, category + " " + language)
-
-                        Log.d(LOG_TAG, "!!!!!!!!!!!!! Delete And Insert   !!!!!!!!!!!!")
-
                         completableFromAction({
-                            actionDeleteAndInsertToLocalDB(
-                                category,
-                                language,
-                                response.data
-                            )
+                            response?.data?.let {
+                                actionDeleteAndInsertToLocalDB(
+                                    category,
+                                    language,
+                                    it
+                                )
+                            }
                         }, callbackResultInRepository)
 
                     } else {
 
-                        Log.d(LOG_TAG, "!!!!!!!!!!!!! Insert   !!!!!!!!!!!!")
-
                         completableFromAction(
-                            { actionInsertToLocalDB(response.data) }, callbackResultInRepository
+                            { response.data?.let { actionInsertToLocalDB(it) } },
+                            callbackResultInRepository
                         )
-
                     }
-
-                } else callbackResultViewModel.onDataNotAvailable()
-
-            },
+                },
                 { throwable ->
                     Log.d(LOG_TAG, "Error: " + throwable.message.toString())
                     callbackResultViewModel.onDataNotAvailable()
-
                 })
     }
 
@@ -171,83 +148,3 @@ class NewsRepository
         }
     }
 }
-
-val result = """{
-    "pagination": {
-        "limit": 100,
-        "offset": 0,
-        "count": 100,
-        "total": 293
-    },
-    "data": [
-        {
-            "author": "TMZ Staff_111",
-            "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-            "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-            "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-            "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
-            "language": "en",
-            "country": "us",
-            "published_at": "2020-08-05T05:47:24+00:00"
-        },
-        {
-            "author": "TMZ Staff_222",
-            "title": "Rafael Nadal Pulls Out Of U.S. Open Over COVID-19 Concerns",
-            "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-            "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-            "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
-            "language": null,
-            "country": "us",
-            "published_at": "2020-08-05T05:47:24+00:00"
-        },{
-            "author": "TMZ Staff_333",
-            "title": null,
-            "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-            "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-            "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
-            "language": "en",
-            "country": "us",
-            "published_at": null
-        },{
-            "author": "TMZ Staff_444",
-            "title": null,
-            "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-            "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-            "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
-            "language": "en",
-            "country": "us",
-            "published_at": null
-        }
-        ,{
-            "author": "TMZ Staff_555",
-            "title": null,
-            "description": "Rafael Nadal is officially OUT of the U.S. Open ... the tennis legend said Tuesday it's just too damn unsafe for him to travel to America during the COVID-19 pandemic. \"The situation is very complicated worldwide,\" Nadal wrote in a statement. \"The…",
-            "url": "https://www.tmz.com/2020/08/04/rafael-nadal-us-open-tennis-covid-19-concerns/",
-            "source": "TMZ.com",
-            "image": "https://imagez.tmz.com/image/fa/4by3/2020/08/04/fad55ee236fc4033ba324e941bb8c8b7_md.jpg",
-            "category": "general",
-            "language": "en",
-            "country": "us",
-            "published_at": null
-        }
-    ]
-}"""
-
-
-//        if (result != null) {
-//
-//            Log.d(LOG_TAG, category + " | " + language)
-//
-//            var gson = Gson()
-//            var testModel = gson.fromJson(result, NewsSource::class.java)
-//
-//
-//        }

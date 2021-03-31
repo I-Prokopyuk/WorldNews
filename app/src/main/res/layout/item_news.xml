@@ -25,6 +25,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/purple_100"
             android:visibility="visible">
 
             <ProgressBar
@@ -75,7 +76,7 @@
 
             <TextView
                 android:id="@+id/news_source"
-                android:layout_width="wrap_content"
+                android:layout_width="500dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/news_text_margin"
                 android:alpha="@dimen/news_text_background_alpha"
@@ -86,7 +87,8 @@
                 android:textSize="@dimen/news_attribute_font_size"
                 android:visibility="@{item.source!=null ? View.VISIBLE : View.GONE}"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="@dimen/news_source_constraint_width_max" />
 
             <TextView
                 android:id="@+id/news_published"

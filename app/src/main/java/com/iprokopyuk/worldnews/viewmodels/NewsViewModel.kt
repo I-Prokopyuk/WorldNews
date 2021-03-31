@@ -23,7 +23,7 @@ class NewsViewModel @Inject constructor(
     var category: String
     var language: String
 
-    var connectionCheck: Boolean = false
+    var internetConnection: Boolean? = null
     var updatePagedList: Boolean = false
 
     private val boundaryCallback = NewsBoundaryCallback()
@@ -37,15 +37,28 @@ class NewsViewModel @Inject constructor(
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({ isConnected ->
-                _internetConnection.value = isConnected
-                if (!connectionCheck) getNews(category, language)
-                connectionCheck = true
+
+                internetConnection?.also {
+
+                    internetConnection = isConnected
+
+                    _internetConnectionStatus.value = internetConnection
+
+                } ?: run {
+
+                    if (isConnected) getNews(category, language)
+
+                    if (!isConnected) _internetConnectionStatus.value = false
+
+                    internetConnection = isConnected
+                }
             })
     }
 
-    private var _internetConnection: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(true)
-    val internetConnection: NotNullMutableLiveData<Boolean>
-        get() = _internetConnection
+    private var _internetConnectionStatus: NotNullMutableLiveData<Boolean?> =
+        NotNullMutableLiveData(null)
+    val internetConnectionStatus: NotNullMutableLiveData<Boolean?>
+        get() = _internetConnectionStatus
 
     private var _refreshing: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(false)
     val refreshing: NotNullMutableLiveData<Boolean>
@@ -73,7 +86,9 @@ class NewsViewModel @Inject constructor(
         category = _category
         language = _language
 
-        newsRepository.getNews(true, internetConnection.value, category, language, callbackResult)
+        internetConnection?.let {
+            newsRepository.getNews(true, category, language, callbackResult)
+        }
     }
 
     fun getNewLivePagedListBuilder() =
@@ -92,13 +107,9 @@ class NewsViewModel @Inject constructor(
 
             Log.d(LOG_TAG, "End data  {{{{{{{{{{{{{{{{{{{{{{{")
 
-            newsRepository.getNews(
-                false,
-                internetConnection.value,
-                category,
-                language,
-                callbackResult
-            )
+            internetConnection?.let {
+                if (it) newsRepository.getNews(false, category, language, callbackResult)
+            }
         }
     }
 
@@ -109,7 +120,7 @@ class NewsViewModel @Inject constructor(
             _refreshing.value = false
             _containerWithInformation.value = false
 
-            Log.d(LOG_TAG, "Data Available <<<<<<<")
+            Log.d(LOG_TAG, "Data Available <<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!")
         }
 
         override fun onDataNotAvailable() {
@@ -119,7 +130,7 @@ class NewsViewModel @Inject constructor(
             _refreshing.value = false
             _containerWithInformation.value = true
 
-            Log.d(LOG_TAG, "Data Not Available")
+            Log.d(LOG_TAG, "Data Not Available <<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!")
         }
     }
 }
