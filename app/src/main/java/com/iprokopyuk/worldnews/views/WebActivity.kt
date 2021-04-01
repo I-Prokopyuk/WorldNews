@@ -6,7 +6,7 @@ import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.databinding.ActivityWebBinding
 import com.iprokopyuk.worldnews.viewmodels.WebViewModel
 import com.iprokopyuk.worldnews.views.base.BaseActivity
-import kotlinx.android.synthetic.main.activity_news.*
+import kotlinx.android.synthetic.main.activity_web.*
 import javax.inject.Inject
 
 class WebActivity : BaseActivity<ActivityWebBinding>() {
