@@ -18,5 +18,7 @@ open class BaseViewModel : ViewModel() {
         compositeDisposable.clear()
         internetDisposable.dispose()
         super.onCleared()
+
+
     }
 }

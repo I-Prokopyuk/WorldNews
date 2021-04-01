@@ -6,6 +6,7 @@ import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.databinding.ActivityWebBinding
 import com.iprokopyuk.worldnews.viewmodels.WebViewModel
 import com.iprokopyuk.worldnews.views.base.BaseActivity
+import kotlinx.android.synthetic.main.activity_news.*
 import javax.inject.Inject
 
 class WebActivity : BaseActivity<ActivityWebBinding>() {
@@ -14,13 +15,15 @@ class WebActivity : BaseActivity<ActivityWebBinding>() {
 
     override fun getLayoutResId() = R.layout.activity_web
 
+    override fun getViewForSnackbar() = layout
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding.vm = webViewModel
         binding.setLifecycleOwner(this)
 
-        onObserveTointernetConnection({ webViewModel.getRefresh() })
+        onObserveTointernetConnection({ webViewModel.loadResourceFromUrl() })
     }
 
     override fun getLiveDataInternetConnection(): LiveData<Boolean?> =

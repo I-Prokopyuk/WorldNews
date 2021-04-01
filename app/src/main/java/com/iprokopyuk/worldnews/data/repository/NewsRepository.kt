@@ -28,8 +28,6 @@ class NewsRepository
     lateinit var language: String
     lateinit var callbackResultViewModel: ICallbackResultBoolean
 
-    private val callbackResultInRepository = CallbackResultNews()
-
     fun getSingleApi(
         _category: String,
         _language: String,
@@ -48,24 +46,21 @@ class NewsRepository
         _listNews: List<News>
     ) = newsDao.deleteAndInsert(_category, _language, _listNews)
 
-
     fun actionInsertToLocalDB(_listNews: List<News>) = newsDao.insertNews(_listNews)
 
-
     fun completableFromAction(
-        action: () -> Unit,
-        callbackResult: ICallbackResultBoolean
+        action: () -> Unit
     ): Disposable {
         return Completable.fromAction(action)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 Log.d(LOG_TAG, "News update or insert Local DB")
-                callbackResult.onDataAvailable()
+                callbackResultViewModel.onDataAvailable()
             },
                 { throwable ->
                     Log.d(LOG_TAG, "Error: " + throwable.message.toString())
-                    callbackResult.onDataNotAvailable()
+                    callbackResultViewModel.onDataNotAvailable()
                 })
     }
 
@@ -121,13 +116,12 @@ class NewsRepository
                                     it
                                 )
                             }
-                        }, callbackResultInRepository)
+                        })
 
                     } else {
 
                         completableFromAction(
-                            { response.data?.let { actionInsertToLocalDB(it) } },
-                            callbackResultInRepository
+                            { response.data?.let { actionInsertToLocalDB(it) } }
                         )
                     }
                 },
@@ -137,14 +131,4 @@ class NewsRepository
                 })
     }
 
-
-    inner class CallbackResultNews : ICallbackResultBoolean {
-        override fun onDataAvailable() {
-            callbackResultViewModel.onDataAvailable()
-        }
-
-        override fun onDataNotAvailable() {
-            callbackResultViewModel.onDataNotAvailable()
-        }
-    }
 }

@@ -2,6 +2,7 @@ package com.iprokopyuk.worldnews.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
@@ -46,11 +47,13 @@ class NewsViewModel @Inject constructor(
 
                 } ?: run {
 
+                    internetConnection = isConnected
+
                     if (isConnected) getNews(category, language)
 
                     if (!isConnected) _internetConnectionStatus.value = false
 
-                    internetConnection = isConnected
+
                 }
             })
     }
@@ -74,6 +77,14 @@ class NewsViewModel @Inject constructor(
     val containerWithInformation: NotNullMutableLiveData<Boolean>
         get() = _containerWithInformation
 
+    private val _uiEventClick = MutableLiveData<Boolean?>()
+    val uiEventClick: LiveData<Boolean?>
+        get() = _uiEventClick
+
+    fun onClickItem() {
+        _uiEventClick.value = true
+    }
+
     fun getRefresh() = getNews(category, language)
 
     fun getNews(_category: String, _language: String) {
@@ -87,7 +98,12 @@ class NewsViewModel @Inject constructor(
         language = _language
 
         internetConnection?.let {
-            newsRepository.getNews(true, category, language, callbackResult)
+            if (it) newsRepository.getNews(
+                true,
+                category,
+                language,
+                callbackResult
+            ) else callbackResult.onDataNotAvailable()
         }
     }
 

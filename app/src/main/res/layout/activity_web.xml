@@ -12,12 +12,12 @@
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="visible">
 
         <LinearLayout
-            android:id="@+id/container_with_information"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -29,13 +29,11 @@
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/info_image"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 app:srcCompat="@drawable/ic_no_connection" />
 
             <TextView
-                android:id="@+id/info_text"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -44,7 +42,6 @@
         </LinearLayout>
 
         <WebView
-            android:id="@+id/webView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible"

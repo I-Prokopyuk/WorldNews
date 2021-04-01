@@ -1,6 +1,5 @@
 package com.iprokopyuk.worldnews.utils
 
-import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -11,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.models.News
+import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
 import com.iprokopyuk.worldnews.views.NewsAdapter
 import com.squareup.picasso.Callback
 import com.squareup.picasso.Picasso
@@ -37,7 +37,7 @@ internal const val DEFAULT_LANGUAGE = "en"
 internal const val LOG_TAG = "myLogs"
 
 //Config pagedList
-internal const val PAGE_SIZE = 3
+internal const val PAGE_SIZE = 15
 
 
 @BindingAdapter("imageResource")
@@ -50,24 +50,18 @@ fun SwipeRefreshLayout.refreshing(visible: Boolean) {
     isRefreshing = visible
 }
 
-@BindingAdapter("news")
-fun setNews(view: RecyclerView, items: PagedList<News>?) {
+@BindingAdapter("news","vm")
+fun setNews(view: RecyclerView, items: PagedList<News>?, vm: NewsViewModel) {
 
     if (items != null) {
-
-        Log.d(LOG_TAG, items.size.toString() + "<<<<<<< SIZE <<<<<<<<<")
-
-        Log.d(LOG_TAG, "set submitList for adapter")
 
         view.adapter?.run {
 
             if (this is NewsAdapter) {
                 this.submitList(items)
-                Log.d(LOG_TAG, "adapter old")
             }
         } ?: run {
-            Log.d(LOG_TAG, "adapter new")
-            NewsAdapter().apply {
+            NewsAdapter(vm).apply {
                 view.adapter = this
                 this.submitList(items)
             }
@@ -86,7 +80,7 @@ fun setImageWithPicasso(imageView: ImageView, url: String?, progressBar: Progres
             .load(it)
             .fit()
             .centerInside()
-            .error(R.drawable.no_image_2)
+            .error(R.drawable.no_image)
 //            .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
             .into(imageView, object : Callback {
                 override fun onSuccess() {

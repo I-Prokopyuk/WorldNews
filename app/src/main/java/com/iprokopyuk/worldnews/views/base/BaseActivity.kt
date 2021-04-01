@@ -11,11 +11,12 @@ import androidx.lifecycle.Observer
 import com.google.android.material.snackbar.Snackbar
 import com.iprokopyuk.worldnews.R
 import dagger.android.support.DaggerAppCompatActivity
-import kotlinx.android.synthetic.main.content_main.*
 
 abstract class BaseActivity<T : ViewDataBinding> : DaggerAppCompatActivity() {
     @LayoutRes
     abstract fun getLayoutResId(): Int
+
+    abstract fun getViewForSnackbar(): View
 
     abstract fun getLiveDataInternetConnection(): LiveData<Boolean?>
 
@@ -30,7 +31,7 @@ abstract class BaseActivity<T : ViewDataBinding> : DaggerAppCompatActivity() {
     fun showSnackbar(text: String, textAction: String, action: () -> Unit) {
 
         val snackbar = Snackbar.make(
-            linearLayout,
+            getViewForSnackbar(),
             text,
             Snackbar.LENGTH_LONG
         )

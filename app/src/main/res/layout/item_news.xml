@@ -12,6 +12,10 @@
         <variable
             name="item"
             type="com.iprokopyuk.worldnews.models.News" />
+
+        <variable
+            name="vm"
+            type="com.iprokopyuk.worldnews.viewmodels.NewsViewModel" />
     </data>
 
     <androidx.cardview.widget.CardView
@@ -19,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="5dp"
         android:layout_marginBottom="10dp"
+        android:onClick="@{()->vm.onClickItem()}"
         app:cardCornerRadius="8dp"
         app:cardElevation="10dp">
 
@@ -76,7 +81,7 @@
 
             <TextView
                 android:id="@+id/news_source"
-                android:layout_width="500dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/news_text_margin"
                 android:alpha="@dimen/news_text_background_alpha"
@@ -133,6 +138,5 @@
                 app:layout_constraintBottom_toBottomOf="parent" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
     </androidx.cardview.widget.CardView>
 </layout>
