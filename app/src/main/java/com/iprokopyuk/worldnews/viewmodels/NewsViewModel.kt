@@ -15,7 +15,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-@AppScoped
 class NewsViewModel @Inject constructor(
     private val newsDao: NewsDao,
     private val newsRepository: NewsRepository
@@ -23,6 +22,7 @@ class NewsViewModel @Inject constructor(
 ) {
     var category: String
     var language: String
+    var countries: String
 
     var internetConnection: Boolean? = null
     var updatePagedList: Boolean = false
@@ -31,8 +31,12 @@ class NewsViewModel @Inject constructor(
     private val callbackResult = CallbackResultNews()
 
     init {
+
+        Log.d(LOG_TAG,"Block init NewsViewModel................!!!!!!!!!!!!!!!!!")
+
         category = DEFAULT_CATEGORY
         language = DEFAULT_LANGUAGE
+        countries = DEFAULT_COUNTRIES
 
         internetDisposable = ReactiveNetwork.observeInternetConnectivity()
             .subscribeOn(Schedulers.io())
@@ -49,11 +53,9 @@ class NewsViewModel @Inject constructor(
 
                     internetConnection = isConnected
 
-                    if (isConnected) getNews(category, language)
+                    if (isConnected) getNews(category, language, countries)
 
                     if (!isConnected) _internetConnectionStatus.value = false
-
-
                 }
             })
     }
@@ -77,17 +79,17 @@ class NewsViewModel @Inject constructor(
     val containerWithInformation: NotNullMutableLiveData<Boolean>
         get() = _containerWithInformation
 
-    private val _uiEventClick = MutableLiveData<Boolean?>()
-    val uiEventClick: LiveData<Boolean?>
+    private val _uiEventClick = MutableLiveData<String?>()
+    val uiEventClick: LiveData<String?>
         get() = _uiEventClick
 
-    fun onClickItem() {
-        _uiEventClick.value = true
+    fun onClickItem(url: String?) {
+        url.let { _uiEventClick.value = it }
     }
 
-    fun getRefresh() = getNews(category, language)
+    fun getRefresh() = getNews(category, language, countries)
 
-    fun getNews(_category: String, _language: String) {
+    fun getNews(_category: String, _language: String, _countries: String) {
 
         _refreshing.value = true
 
@@ -96,12 +98,14 @@ class NewsViewModel @Inject constructor(
 
         category = _category
         language = _language
+        countries = _countries
 
         internetConnection?.let {
             if (it) newsRepository.getNews(
                 true,
                 category,
                 language,
+                countries,
                 callbackResult
             ) else callbackResult.onDataNotAvailable()
         }
@@ -124,7 +128,7 @@ class NewsViewModel @Inject constructor(
             Log.d(LOG_TAG, "End data  {{{{{{{{{{{{{{{{{{{{{{{")
 
             internetConnection?.let {
-                if (it) newsRepository.getNews(false, category, language, callbackResult)
+                if (it) newsRepository.getNews(false, category, language, countries, callbackResult)
             }
         }
     }

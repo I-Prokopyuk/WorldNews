@@ -1,6 +1,8 @@
 package com.iprokopyuk.worldnews.utils
 
 import android.view.View
+import android.webkit.WebView
+import android.webkit.WebViewClient
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -32,6 +34,7 @@ internal const val DATE_FORMAT_TO = "MMM dd, yyyy hh:mm"
 //Default
 internal const val DEFAULT_CATEGORY = "general"
 internal const val DEFAULT_LANGUAGE = "en"
+internal const val DEFAULT_COUNTRIES = "us"
 
 //LOG
 internal const val LOG_TAG = "myLogs"
@@ -50,7 +53,7 @@ fun SwipeRefreshLayout.refreshing(visible: Boolean) {
     isRefreshing = visible
 }
 
-@BindingAdapter("news","vm")
+@BindingAdapter("news", "vm")
 fun setNews(view: RecyclerView, items: PagedList<News>?, vm: NewsViewModel) {
 
     if (items != null) {
@@ -107,6 +110,13 @@ fun parseDateFormat(textView: TextView, date: String?) {
 
         textView.text = dateParse
     }
+}
+
+@BindingAdapter("loadUrl")
+fun WebView.setUrl(url: String) {
+    this.setWebViewClient(WebViewClient())
+    this.clearCache(true)
+    this.loadUrl(url)
 }
 
 

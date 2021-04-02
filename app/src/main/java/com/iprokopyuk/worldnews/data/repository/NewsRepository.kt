@@ -26,15 +26,24 @@ class NewsRepository
     var clearCache: Boolean = false
     lateinit var category: String
     lateinit var language: String
+    lateinit var countries: String
     lateinit var callbackResultViewModel: ICallbackResultBoolean
 
     fun getSingleApi(
         _category: String,
         _language: String,
+        _countries: String,
         _paginationOffset: Int,
         _paginationLimit: Int
     ) =
-        apiServices.getNews(API_KEY, _category, _language, _paginationOffset, _paginationLimit)
+        apiServices.getNews(
+            API_KEY,
+            _category,
+            _language,
+            _countries,
+            _paginationOffset,
+            _paginationLimit
+        )
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .unsubscribeOn(Schedulers.io())
@@ -69,11 +78,13 @@ class NewsRepository
         _clearCache: Boolean,
         _category: String,
         _language: String,
+        _countries: String,
         _callbackResult: ICallbackResultBoolean
     ) {
         clearCache = _clearCache
         category = _category
         language = _language
+        countries = _countries
         callbackResultViewModel = _callbackResult
 
         if (clearCache) {
@@ -85,7 +96,7 @@ class NewsRepository
 
     fun getData() {
 
-        getSingleApi(category, language, paginationOffset, paginationLimit)
+        getSingleApi(category, language, countries, paginationOffset, paginationLimit)
             .subscribe(
                 { response ->
 

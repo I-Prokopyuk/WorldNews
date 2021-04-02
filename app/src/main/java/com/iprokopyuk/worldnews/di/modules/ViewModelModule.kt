@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
 import com.iprokopyuk.worldnews.viewmodels.ViewModelFactory
+import com.iprokopyuk.worldnews.viewmodels.WebViewModel
 import dagger.Binds
 import dagger.MapKey
 import dagger.Module
@@ -19,7 +20,12 @@ abstract class ViewModelModule {
     @Binds
     @IntoMap
     @ViewModelKey(NewsViewModel::class)
-    abstract fun bindNewsArticleViewModel(newsViewModel: NewsViewModel): ViewModel
+    abstract fun bindNewsViewModel(newsViewModel: NewsViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(WebViewModel::class)
+    abstract fun bindWebViewModel(newsViewModel: WebViewModel): ViewModel
 
     @Retention(AnnotationRetention.RUNTIME)
     @MapKey

@@ -1,17 +1,19 @@
 package com.iprokopyuk.worldnews.views
 
 import android.os.Bundle
+import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
 import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.databinding.ActivityWebBinding
 import com.iprokopyuk.worldnews.viewmodels.WebViewModel
 import com.iprokopyuk.worldnews.views.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_web.*
-import javax.inject.Inject
 
 class WebActivity : BaseActivity<ActivityWebBinding>() {
-    @Inject
-    lateinit var webViewModel: WebViewModel
+
+    private val webViewModel: WebViewModel by viewModels {
+        viewModelFactory
+    }
 
     override fun getLayoutResId() = R.layout.activity_web
 
@@ -22,6 +24,10 @@ class WebActivity : BaseActivity<ActivityWebBinding>() {
 
         binding.vm = webViewModel
         binding.setLifecycleOwner(this)
+
+        val url = intent.getStringExtra("url").toString()
+
+        webViewModel.url.setValue(url)
 
         onObserveTointernetConnection({ webViewModel.loadResourceFromUrl() })
     }

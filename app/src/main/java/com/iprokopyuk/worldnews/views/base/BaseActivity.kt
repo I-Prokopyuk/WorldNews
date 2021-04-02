@@ -8,11 +8,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.iprokopyuk.worldnews.R
 import dagger.android.support.DaggerAppCompatActivity
+import javax.inject.Inject
 
 abstract class BaseActivity<T : ViewDataBinding> : DaggerAppCompatActivity() {
+
+    @Inject
+    lateinit var viewModelFactory:ViewModelProvider.Factory
+
     @LayoutRes
     abstract fun getLayoutResId(): Int
 

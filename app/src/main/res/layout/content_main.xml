@@ -93,7 +93,7 @@
                 android:layout_height="@dimen/category_ImageButton_width_height"
                 android:layout_margin="@dimen/category_ImageButton_margin"
                 android:background="@drawable/button_image_selector"
-                android:onClick='@{() -> vm.getNews(vm.category,"en")}'
+                android:onClick='@{() -> vm.getNews(vm.category,"en","us")}'
                 android:padding="@dimen/category_ImageButton_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/flag_usa"
@@ -107,7 +107,7 @@
                 android:layout_height="@dimen/category_ImageButton_width_height"
                 android:layout_margin="@dimen/category_ImageButton_margin"
                 android:background="@drawable/button_image_selector"
-                android:onClick='@{() -> vm.getNews(vm.category,"de")}'
+                android:onClick='@{() -> vm.getNews(vm.category,"de","de")}'
                 android:padding="@dimen/category_ImageButton_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/flag_germany"
@@ -121,7 +121,7 @@
                 android:layout_height="@dimen/category_ImageButton_width_height"
                 android:layout_margin="@dimen/category_ImageButton_margin"
                 android:background="@drawable/button_image_selector"
-                android:onClick='@{() -> vm.getNews(vm.category,"ru")}'
+                android:onClick='@{() -> vm.getNews(vm.category,"ru","ru")}'
                 android:padding="@dimen/category_ImageButton_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/flag_russia"
@@ -135,7 +135,7 @@
                 android:layout_height="@dimen/category_ImageButton_width_height"
                 android:layout_margin="@dimen/category_ImageButton_margin"
                 android:background="@drawable/button_image_selector"
-                android:onClick='@{() -> vm.getNews(vm.category,"es")}'
+                android:onClick='@{() -> vm.getNews(vm.category,"es","es")}'
                 android:padding="@dimen/category_ImageButton_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/flag_spain"
@@ -149,7 +149,7 @@
                 android:layout_height="@dimen/category_ImageButton_width_height"
                 android:layout_margin="@dimen/category_ImageButton_margin"
                 android:background="@drawable/button_image_selector"
-                android:onClick='@{() -> vm.getNews(vm.category,"fr")}'
+                android:onClick='@{() -> vm.getNews(vm.category,"fr","fr")}'
                 android:padding="@dimen/category_ImageButton_padding"
                 android:scaleType="fitCenter"
                 android:src="@drawable/flag_france"

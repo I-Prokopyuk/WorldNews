@@ -1,20 +1,23 @@
 package com.iprokopyuk.worldnews.viewmodels
 
+import android.util.Log
+import androidx.lifecycle.MutableLiveData
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
-import com.iprokopyuk.worldnews.di.scopes.AppScoped
-import com.iprokopyuk.worldnews.utils.ICallbackResultBoolean
+import com.iprokopyuk.worldnews.di.scopes.ActivityScoped
+import com.iprokopyuk.worldnews.utils.LOG_TAG
 import com.iprokopyuk.worldnews.utils.NotNullMutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-@AppScoped
 class WebViewModel @Inject constructor() : BaseViewModel(
 ) {
     private var internetConnection: Boolean? = null
-    private val callbackResult = CallbackResultNews()
 
     init {
+        Log.d(LOG_TAG, "Block init WebViewModel................!!!!!!!!!!!!!!!!!")
+
+
         internetDisposable = ReactiveNetwork.observeInternetConnectivity()
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
@@ -22,21 +25,27 @@ class WebViewModel @Inject constructor() : BaseViewModel(
 
                 internetConnection?.also {
 
+                    if (isConnected) _containerWithInformation.value = false
+
                     internetConnection = isConnected
 
                     _internetConnectionStatus.value = internetConnection
 
                 } ?: run {
 
-                    if (!isConnected) _internetConnectionStatus.value = false
+                    if (!isConnected) {
+                        _internetConnectionStatus.value = false
 
+                        _containerWithInformation.value = true
+                    }
                     internetConnection = isConnected
                 }
             })
     }
 
     fun loadResourceFromUrl() {
-
+        url.value = url.value
+        _refreshing.value = false
     }
 
     private var _internetConnectionStatus: NotNullMutableLiveData<Boolean?> =
@@ -44,24 +53,14 @@ class WebViewModel @Inject constructor() : BaseViewModel(
     val internetConnectionStatus: NotNullMutableLiveData<Boolean?>
         get() = _internetConnectionStatus
 
-
     private var _containerWithInformation: NotNullMutableLiveData<Boolean> =
         NotNullMutableLiveData(false)
     val containerWithInformation: NotNullMutableLiveData<Boolean>
         get() = _containerWithInformation
 
+    private var _refreshing: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(false)
+    val refreshing: NotNullMutableLiveData<Boolean>
+        get() = _refreshing
 
-    inner class CallbackResultNews : ICallbackResultBoolean {
-        override fun onDataAvailable() {
-
-            _containerWithInformation.value = false
-
-        }
-
-        override fun onDataNotAvailable() {
-
-            _containerWithInformation.value = true
-
-        }
-    }
+    var url = MutableLiveData<String?>()
 }
