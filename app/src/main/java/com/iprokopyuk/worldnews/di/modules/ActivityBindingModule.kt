@@ -9,11 +9,9 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class ActivityBindingModule {
 
-    @ActivityScoped
     @ContributesAndroidInjector
     abstract fun newsActivity(): NewsActivity
 
-    @ActivityScoped
     @ContributesAndroidInjector
     abstract fun webActivity(): WebActivity
 }

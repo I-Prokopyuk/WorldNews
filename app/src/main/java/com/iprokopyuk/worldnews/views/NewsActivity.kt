@@ -10,6 +10,7 @@ import com.iprokopyuk.worldnews.utils.extensions.initializingCategoryNavigation
 import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
 import com.iprokopyuk.worldnews.views.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_news.*
+import javax.inject.Inject
 
 class NewsActivity : BaseActivity<ActivityNewsBinding>() {
 

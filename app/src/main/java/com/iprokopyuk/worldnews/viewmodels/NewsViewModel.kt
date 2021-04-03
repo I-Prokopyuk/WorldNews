@@ -8,16 +8,17 @@ import androidx.paging.PagedList
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.repository.NewsRepository
-import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.utils.*
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class NewsViewModel @Inject constructor(
     private val newsDao: NewsDao,
-    private val newsRepository: NewsRepository
+    private val newsRepository: NewsRepository,
+    private val compositeDisposable: CompositeDisposable
 ) : BaseViewModel(
 ) {
     var category: String
@@ -32,32 +33,34 @@ class NewsViewModel @Inject constructor(
 
     init {
 
-        Log.d(LOG_TAG,"Block init NewsViewModel................!!!!!!!!!!!!!!!!!")
+        Log.d(LOG_TAG, "Block init NewsViewModel................!!!!!!!!!!!!!!!!!")
 
         category = DEFAULT_CATEGORY
         language = DEFAULT_LANGUAGE
         countries = DEFAULT_COUNTRIES
 
-        internetDisposable = ReactiveNetwork.observeInternetConnectivity()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ isConnected ->
+        compositeDisposable.add(
+            ReactiveNetwork.observeInternetConnectivity()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ isConnected ->
 
-                internetConnection?.also {
+                    internetConnection?.also {
 
-                    internetConnection = isConnected
+                        internetConnection = isConnected
 
-                    _internetConnectionStatus.value = internetConnection
+                        _internetConnectionStatus.value = internetConnection
 
-                } ?: run {
+                    } ?: run {
 
-                    internetConnection = isConnected
+                        internetConnection = isConnected
 
-                    if (isConnected) getNews(category, language, countries)
+                        if (isConnected) getNews(category, language, countries)
 
-                    if (!isConnected) _internetConnectionStatus.value = false
-                }
-            })
+                        if (!isConnected) _internetConnectionStatus.value = false
+                    }
+                })
+        )
     }
 
     private var _internetConnectionStatus: NotNullMutableLiveData<Boolean?> =
@@ -153,4 +156,6 @@ class NewsViewModel @Inject constructor(
             Log.d(LOG_TAG, "Data Not Available <<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!")
         }
     }
+
+    override fun getCompositeDisposable(): CompositeDisposable = compositeDisposable
 }

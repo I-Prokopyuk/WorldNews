@@ -7,6 +7,7 @@ import com.iprokopyuk.worldnews.di.scopes.ActivityScoped
 import com.iprokopyuk.worldnews.utils.LOG_TAG
 import com.iprokopyuk.worldnews.utils.NotNullMutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
@@ -63,4 +64,7 @@ class WebViewModel @Inject constructor() : BaseViewModel(
         get() = _refreshing
 
     var url = MutableLiveData<String?>()
+    override fun getCompositeDisposable(): CompositeDisposable {
+        TODO("Not yet implemented")
+    }
 }

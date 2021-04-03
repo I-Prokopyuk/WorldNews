@@ -17,7 +17,7 @@ import javax.inject.Inject
 abstract class BaseActivity<T : ViewDataBinding> : DaggerAppCompatActivity() {
 
     @Inject
-    lateinit var viewModelFactory:ViewModelProvider.Factory
+    lateinit var viewModelFactory: ViewModelProvider.Factory
 
     @LayoutRes
     abstract fun getLayoutResId(): Int

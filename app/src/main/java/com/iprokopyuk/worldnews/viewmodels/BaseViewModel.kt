@@ -5,19 +5,17 @@ import androidx.lifecycle.ViewModel
 import com.iprokopyuk.worldnews.utils.LOG_TAG
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
-import javax.inject.Inject
 
-open class BaseViewModel : ViewModel() {
- //   @Inject
-    lateinit var compositeDisposable: CompositeDisposable
-    lateinit var internetDisposable: Disposable
+abstract class BaseViewModel : ViewModel() {
+
+    abstract fun getCompositeDisposable(): CompositeDisposable
 
     init {
         Log.d(LOG_TAG, "Block init BaseViewModel................!!!!!!!!!!!!!!!!!")
     }
 
     fun addToDisposable(disposable: Disposable) {
-        //compositeDisposable.add(disposable)
+        getCompositeDisposable().add(disposable)
     }
 
     override fun onCleared() {
@@ -27,8 +25,7 @@ open class BaseViewModel : ViewModel() {
             "ViewModel Cleared........................................................!!!!!!!!!!"
         )
 
-       // compositeDisposable.clear()
-        //internetDisposable.dispose()
+        getCompositeDisposable().clear()
         super.onCleared()
     }
 }
