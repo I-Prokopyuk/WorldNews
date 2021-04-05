@@ -3,45 +3,43 @@ package com.iprokopyuk.worldnews.viewmodels
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
-import com.iprokopyuk.worldnews.di.scopes.ActivityScoped
 import com.iprokopyuk.worldnews.utils.LOG_TAG
 import com.iprokopyuk.worldnews.utils.NotNullMutableLiveData
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class WebViewModel @Inject constructor() : BaseViewModel(
+
 ) {
     private var internetConnection: Boolean? = null
 
     init {
         Log.d(LOG_TAG, "Block init WebViewModel................!!!!!!!!!!!!!!!!!")
 
+        compositeDisposable.add(
+            reactiveNetworkObservable()
+                .subscribe({ isConnected ->
 
-        internetDisposable = ReactiveNetwork.observeInternetConnectivity()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ isConnected ->
+                    internetConnection?.also {
 
-                internetConnection?.also {
+                        if (isConnected) _containerWithInformation.value = false
 
-                    if (isConnected) _containerWithInformation.value = false
+                        internetConnection = isConnected
 
-                    internetConnection = isConnected
+                        _internetConnectionStatus.value = internetConnection
 
-                    _internetConnectionStatus.value = internetConnection
+                    } ?: run {
 
-                } ?: run {
+                        if (!isConnected) {
+                            _internetConnectionStatus.value = false
 
-                    if (!isConnected) {
-                        _internetConnectionStatus.value = false
-
-                        _containerWithInformation.value = true
+                            _containerWithInformation.value = true
+                        }
+                        internetConnection = isConnected
                     }
-                    internetConnection = isConnected
-                }
-            })
+                })
+        )
     }
 
     fun loadResourceFromUrl() {
@@ -64,7 +62,4 @@ class WebViewModel @Inject constructor() : BaseViewModel(
         get() = _refreshing
 
     var url = MutableLiveData<String?>()
-    override fun getCompositeDisposable(): CompositeDisposable {
-        TODO("Not yet implemented")
-    }
 }

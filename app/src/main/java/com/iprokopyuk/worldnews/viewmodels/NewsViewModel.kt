@@ -5,20 +5,15 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.repository.NewsRepository
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.utils.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
 class NewsViewModel @Inject constructor(
     private val newsDao: NewsDao,
     private val newsRepository: NewsRepository,
-    private val compositeDisposable: CompositeDisposable
 ) : BaseViewModel(
 ) {
     var category: String
@@ -40,9 +35,7 @@ class NewsViewModel @Inject constructor(
         countries = DEFAULT_COUNTRIES
 
         compositeDisposable.add(
-            ReactiveNetwork.observeInternetConnectivity()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
+            reactiveNetworkObservable()
                 .subscribe({ isConnected ->
 
                     internetConnection?.also {
@@ -109,7 +102,8 @@ class NewsViewModel @Inject constructor(
                 category,
                 language,
                 countries,
-                callbackResult
+                callbackResult,
+                compositeDisposable
             ) else callbackResult.onDataNotAvailable()
         }
     }
@@ -131,7 +125,14 @@ class NewsViewModel @Inject constructor(
             Log.d(LOG_TAG, "End data  {{{{{{{{{{{{{{{{{{{{{{{")
 
             internetConnection?.let {
-                if (it) newsRepository.getNews(false, category, language, countries, callbackResult)
+                if (it) newsRepository.getNews(
+                    false,
+                    category,
+                    language,
+                    countries,
+                    callbackResult,
+                    compositeDisposable
+                )
             }
         }
     }
@@ -156,6 +157,4 @@ class NewsViewModel @Inject constructor(
             Log.d(LOG_TAG, "Data Not Available <<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!")
         }
     }
-
-    override fun getCompositeDisposable(): CompositeDisposable = compositeDisposable
 }

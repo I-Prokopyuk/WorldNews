@@ -12,12 +12,16 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.iprokopyuk.worldnews.R
 import dagger.android.support.DaggerAppCompatActivity
+import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 abstract class BaseActivity<T : ViewDataBinding> : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+//    @Inject
+//    lateinit var compositeDisposable: CompositeDisposable
 
     @LayoutRes
     abstract fun getLayoutResId(): Int
@@ -26,7 +30,7 @@ abstract class BaseActivity<T : ViewDataBinding> : DaggerAppCompatActivity() {
 
     abstract fun getLiveDataInternetConnection(): LiveData<Boolean?>
 
-    lateinit var binding: T
+    protected lateinit var binding: T
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
