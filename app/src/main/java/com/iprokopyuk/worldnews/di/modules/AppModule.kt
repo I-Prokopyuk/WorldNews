@@ -14,12 +14,11 @@ import com.iprokopyuk.worldnews.utils.DB_NAME
 import com.squareup.picasso.Picasso
 import dagger.Module
 import dagger.Provides
-import io.reactivex.disposables.CompositeDisposable
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-@Module(includes = [ActivityBindingModule::class])
+@Module(includes = [ActivityBindingModule::class, ViewModelModule::class])
 class AppModule {
 
     @AppScoped
@@ -59,10 +58,6 @@ class AppModule {
         gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
         return gsonBuilder.create()
     }
-
-    @AppScoped
-    @Provides
-    fun provideCompositeDisposable(): CompositeDisposable = CompositeDisposable()
 
     @AppScoped
     @Provides

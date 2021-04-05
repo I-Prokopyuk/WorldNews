@@ -12,6 +12,7 @@ interface ApiServices {
         @Query("access_key") key: String,
         @Query("categories") categories: String,
         @Query("languages") languages: String,
+        @Query("countries") countries: String,
         @Query("offset") offset: Int,
         @Query("limit") limit: Int
     ): Single<NewsSource>

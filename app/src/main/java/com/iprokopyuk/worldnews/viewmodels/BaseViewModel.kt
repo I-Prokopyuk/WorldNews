@@ -1,22 +1,45 @@
 package com.iprokopyuk.worldnews.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
+import com.iprokopyuk.worldnews.utils.LOG_TAG
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.disposables.Disposable
-import javax.inject.Inject
+import io.reactivex.schedulers.Schedulers
 
-open class BaseViewModel : ViewModel() {
-    @Inject
-    lateinit var compositeDisposable: CompositeDisposable
-    lateinit var internetDisposable: Disposable
+abstract class BaseViewModel : ViewModel() {
 
-    fun addToDisposable(disposable: Disposable) {
-        compositeDisposable.add(disposable)
+    var compositeDisposable = CompositeDisposable()
+
+    init {
+        Log.d(LOG_TAG, "Block init BaseViewModel................!!!!!!!!!!!!!!!!!")
     }
 
+    fun reactiveNetworkObservable() = ReactiveNetwork.observeInternetConnectivity()
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+
     override fun onCleared() {
+
+        Log.d(
+            LOG_TAG,
+            compositeDisposable.size()
+                .toString() + "<<<<<<<<<<<<<<  ------- SIZE Disposable........."
+        )
+
+        Log.d(
+            LOG_TAG,
+            "ViewModel Cleared........................................................!!!!!!!!!!"
+        )
+
         compositeDisposable.clear()
-        internetDisposable.dispose()
+
+        Log.d(
+            LOG_TAG,
+            compositeDisposable.size()
+                .toString() + "<<<<<<<<<<<<<<  ------- SIZE Disposable........."
+        )
         super.onCleared()
     }
 }

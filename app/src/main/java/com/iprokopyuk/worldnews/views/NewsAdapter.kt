@@ -9,9 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.databinding.ItemNewsBinding
 import com.iprokopyuk.worldnews.models.News
+import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
 import com.iprokopyuk.worldnews.views.NewsAdapter.ModelViewHolder
 
-class NewsAdapter : PagedListAdapter<News, ModelViewHolder>(DIFF_CALLBACK) {
+class NewsAdapter(val vm: NewsViewModel) : PagedListAdapter<News, ModelViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
         ModelViewHolder(
@@ -26,6 +27,7 @@ class NewsAdapter : PagedListAdapter<News, ModelViewHolder>(DIFF_CALLBACK) {
     override fun onBindViewHolder(holder: ModelViewHolder, position: Int) {
 
         holder.binding.item = getItem(position)
+        holder.binding.vm = vm
     }
 
     inner class ModelViewHolder(var binding: ItemNewsBinding) :

@@ -34,7 +34,8 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:news="@{vm.items}">
+                app:news="@{vm.items}"
+                app:vm="@{vm}">
 
             </androidx.recyclerview.widget.RecyclerView>
 

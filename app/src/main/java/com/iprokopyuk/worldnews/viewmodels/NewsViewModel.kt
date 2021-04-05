@@ -2,50 +2,64 @@ package com.iprokopyuk.worldnews.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
-import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.repository.NewsRepository
-import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.utils.*
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
-@AppScoped
 class NewsViewModel @Inject constructor(
     private val newsDao: NewsDao,
-    private val newsRepository: NewsRepository
+    private val newsRepository: NewsRepository,
 ) : BaseViewModel(
 ) {
     var category: String
     var language: String
+    var countries: String
 
-    var connectionCheck: Boolean = false
+    var internetConnection: Boolean? = null
     var updatePagedList: Boolean = false
 
     private val boundaryCallback = NewsBoundaryCallback()
     private val callbackResult = CallbackResultNews()
 
     init {
+
+        Log.d(LOG_TAG, "Block init NewsViewModel................!!!!!!!!!!!!!!!!!")
+
         category = DEFAULT_CATEGORY
         language = DEFAULT_LANGUAGE
+        countries = DEFAULT_COUNTRIES
 
-        internetDisposable = ReactiveNetwork.observeInternetConnectivity()
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe({ isConnected ->
-                _internetConnection.value = isConnected
-                if (!connectionCheck) getNews(category, language)
-                connectionCheck = true
-            })
+        compositeDisposable.add(
+            reactiveNetworkObservable()
+                .subscribe({ isConnected ->
+
+                    internetConnection?.also {
+
+                        internetConnection = isConnected
+
+                        _internetConnectionStatus.value = internetConnection
+
+                    } ?: run {
+
+                        internetConnection = isConnected
+
+                        if (isConnected) getNews(category, language, countries)
+
+                        if (!isConnected) _internetConnectionStatus.value = false
+                    }
+                })
+        )
     }
 
-    private var _internetConnection: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(true)
-    val internetConnection: NotNullMutableLiveData<Boolean>
-        get() = _internetConnection
+    private var _internetConnectionStatus: NotNullMutableLiveData<Boolean?> =
+        NotNullMutableLiveData(null)
+    val internetConnectionStatus: NotNullMutableLiveData<Boolean?>
+        get() = _internetConnectionStatus
 
     private var _refreshing: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(false)
     val refreshing: NotNullMutableLiveData<Boolean>
@@ -61,9 +75,17 @@ class NewsViewModel @Inject constructor(
     val containerWithInformation: NotNullMutableLiveData<Boolean>
         get() = _containerWithInformation
 
-    fun getRefresh() = getNews(category, language)
+    private val _uiEventClick = MutableLiveData<String?>()
+    val uiEventClick: LiveData<String?>
+        get() = _uiEventClick
 
-    fun getNews(_category: String, _language: String) {
+    fun onClickItem(url: String?) {
+        url.let { _uiEventClick.value = it }
+    }
+
+    fun getRefresh() = getNews(category, language, countries)
+
+    fun getNews(_category: String, _language: String, _countries: String) {
 
         _refreshing.value = true
 
@@ -72,8 +94,18 @@ class NewsViewModel @Inject constructor(
 
         category = _category
         language = _language
+        countries = _countries
 
-        newsRepository.getNews(true, internetConnection.value, category, language, callbackResult)
+        internetConnection?.let {
+            if (it) newsRepository.getNews(
+                true,
+                category,
+                language,
+                countries,
+                callbackResult,
+                compositeDisposable
+            ) else callbackResult.onDataNotAvailable()
+        }
     }
 
     fun getNewLivePagedListBuilder() =
@@ -92,13 +124,16 @@ class NewsViewModel @Inject constructor(
 
             Log.d(LOG_TAG, "End data  {{{{{{{{{{{{{{{{{{{{{{{")
 
-            newsRepository.getNews(
-                false,
-                internetConnection.value,
-                category,
-                language,
-                callbackResult
-            )
+            internetConnection?.let {
+                if (it) newsRepository.getNews(
+                    false,
+                    category,
+                    language,
+                    countries,
+                    callbackResult,
+                    compositeDisposable
+                )
+            }
         }
     }
 
@@ -109,7 +144,7 @@ class NewsViewModel @Inject constructor(
             _refreshing.value = false
             _containerWithInformation.value = false
 
-            Log.d(LOG_TAG, "Data Available <<<<<<<")
+            Log.d(LOG_TAG, "Data Available <<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!")
         }
 
         override fun onDataNotAvailable() {
@@ -119,7 +154,7 @@ class NewsViewModel @Inject constructor(
             _refreshing.value = false
             _containerWithInformation.value = true
 
-            Log.d(LOG_TAG, "Data Not Available")
+            Log.d(LOG_TAG, "Data Not Available <<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!")
         }
     }
 }

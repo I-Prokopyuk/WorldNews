@@ -15,4 +15,5 @@
     <dimen name="news_text_margin">8dp</dimen>
     <dimen name="news_text_background_alpha">0.8</dimen>
     <dimen name="news_image_height">400dp</dimen>
+    <dimen name="news_source_constraint_width_max">200dp</dimen>
 </resources>
