@@ -107,10 +107,15 @@ class NewsRepository
             paginationOffset.toString() + " " + paginationLimit.toString() + " <<<< SELECT"
         )
 
+
+
         getSingleApi(category, language, paginationOffset, paginationLimit)
             .subscribe({ response ->
 
-                if (response.data?.size == 0) callbackResultViewModel.onDataNotAvailable()
+                if (response.data?.size == 0) {
+                    callbackResultViewModel.onDataNotAvailable()
+
+                }
 
                 Log.d(LOG_TAG, "......................Further...................")
 
