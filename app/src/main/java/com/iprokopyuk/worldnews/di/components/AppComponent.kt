@@ -11,8 +11,7 @@ import dagger.android.AndroidInjector
 
 @AppScoped
 @Component(modules = [AndroidInjectionModule::class, AppModule::class])
-public interface AppComponent : AndroidInjector<Application> {
-
+interface AppComponent : AndroidInjector<Application> {
 
     @Component.Builder
     interface Builder {
@@ -22,6 +21,4 @@ public interface AppComponent : AndroidInjector<Application> {
         @BindsInstance
         fun application(app: Application): Builder
     }
-
-    ///override fun inject(app: Application)
 }

@@ -20,18 +20,17 @@ class NewsRepository
     private val newsDao: NewsDao,
     private val apiServices: ApiServices
 ) {
-    //Default pagination
     private var paginationOffset: Int = 0
     private var paginationLimit: Int = 0
 
-    var clearCache: Boolean = false
-    lateinit var category: String
-    lateinit var language: String
-    lateinit var countries: String
-    lateinit var callbackResultViewModel: ICallbackResultBoolean
-    lateinit var compositeDisposable: CompositeDisposable
+    private var clearCache: Boolean = false
+    private lateinit var category: String
+    private lateinit var language: String
+    private lateinit var countries: String
+    private lateinit var callbackResultViewModel: ICallbackResultBoolean
+    private lateinit var compositeDisposable: CompositeDisposable
 
-    fun getSingleApi(
+    private fun getSingleApi(
         _category: String,
         _language: String,
         _countries: String,
@@ -51,15 +50,15 @@ class NewsRepository
             .unsubscribeOn(Schedulers.io())
             .retry(2)
 
-    fun actionDeleteAndInsertToLocalDB(
+    private fun actionDeleteAndInsertToLocalDB(
         _category: String,
         _language: String,
         _listNews: List<News>
     ) = newsDao.deleteAndInsert(_category, _language, _listNews)
 
-    fun actionInsertToLocalDB(_listNews: List<News>) = newsDao.insertNews(_listNews)
+    private fun actionInsertToLocalDB(_listNews: List<News>) = newsDao.insertNews(_listNews)
 
-    fun completableFromAction(
+    private fun completableFromAction(
         action: () -> Unit
     ): Disposable {
         return Completable.fromAction(action)
@@ -98,7 +97,7 @@ class NewsRepository
         getData()
     }
 
-    fun getData() {
+    private fun getData() {
 
         compositeDisposable.add(
             getSingleApi(category, language, countries, paginationOffset, paginationLimit)

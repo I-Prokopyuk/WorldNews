@@ -13,7 +13,6 @@ class CategoryAdapter(
     val list: List<NewsCategory>, val vm: NewsViewModel
 ) : RecyclerView.Adapter<CategoryAdapter.ModelViewHolder>() {
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ModelViewHolder(
         DataBindingUtil.inflate<ItemCategoryBinding>(
             LayoutInflater.from(parent.context),
@@ -30,7 +29,6 @@ class CategoryAdapter(
         holder.binding.vm = vm
         holder.binding.executePendingBindings()
     }
-
 
     inner class ModelViewHolder(var binding: ItemCategoryBinding) :
         RecyclerView.ViewHolder(binding.root) {

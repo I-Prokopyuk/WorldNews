@@ -9,6 +9,7 @@ import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.repository.NewsRepository
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.utils.*
+import com.iprokopyuk.worldnews.viewmodels.base.BaseViewModel
 import javax.inject.Inject
 
 class NewsViewModel @Inject constructor(
@@ -20,8 +21,8 @@ class NewsViewModel @Inject constructor(
     var language: String
     var countries: String
 
-    var internetConnection: Boolean? = null
-    var updatePagedList: Boolean = false
+    private var internetConnection: Boolean? = null
+    private var updatePagedList: Boolean = false
 
     private val boundaryCallback = NewsBoundaryCallback()
     private val callbackResult = CallbackResultNews()
@@ -56,9 +57,9 @@ class NewsViewModel @Inject constructor(
         )
     }
 
-    private var _internetConnectionStatus: NotNullMutableLiveData<Boolean?> =
-        NotNullMutableLiveData(null)
-    val internetConnectionStatus: NotNullMutableLiveData<Boolean?>
+    private var _internetConnectionStatus: MutableLiveData<Boolean?> =
+        MutableLiveData(null)
+    val internetConnectionStatus: MutableLiveData<Boolean?>
         get() = _internetConnectionStatus
 
     private var _refreshing: NotNullMutableLiveData<Boolean> = NotNullMutableLiveData(false)

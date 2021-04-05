@@ -1,4 +1,4 @@
-package com.iprokopyuk.worldnews.viewmodels
+package com.iprokopyuk.worldnews.viewmodels.base
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -10,7 +10,7 @@ import io.reactivex.schedulers.Schedulers
 
 abstract class BaseViewModel : ViewModel() {
 
-    var compositeDisposable = CompositeDisposable()
+    val compositeDisposable = CompositeDisposable()
 
     init {
         Log.d(LOG_TAG, "Block init BaseViewModel................!!!!!!!!!!!!!!!!!")

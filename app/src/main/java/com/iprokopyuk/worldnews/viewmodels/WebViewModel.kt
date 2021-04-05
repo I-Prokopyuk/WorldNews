@@ -2,11 +2,9 @@ package com.iprokopyuk.worldnews.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.github.pwittchen.reactivenetwork.library.rx2.ReactiveNetwork
 import com.iprokopyuk.worldnews.utils.LOG_TAG
 import com.iprokopyuk.worldnews.utils.NotNullMutableLiveData
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.iprokopyuk.worldnews.viewmodels.base.BaseViewModel
 import javax.inject.Inject
 
 class WebViewModel @Inject constructor() : BaseViewModel(
@@ -47,9 +45,9 @@ class WebViewModel @Inject constructor() : BaseViewModel(
         _refreshing.value = false
     }
 
-    private var _internetConnectionStatus: NotNullMutableLiveData<Boolean?> =
-        NotNullMutableLiveData(null)
-    val internetConnectionStatus: NotNullMutableLiveData<Boolean?>
+    private var _internetConnectionStatus: MutableLiveData<Boolean?> =
+        MutableLiveData(null)
+    val internetConnectionStatus: MutableLiveData<Boolean?>
         get() = _internetConnectionStatus
 
     private var _containerWithInformation: NotNullMutableLiveData<Boolean> =

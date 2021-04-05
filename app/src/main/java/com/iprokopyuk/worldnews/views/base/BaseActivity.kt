@@ -12,7 +12,6 @@ import androidx.lifecycle.ViewModelProvider
 import com.google.android.material.snackbar.Snackbar
 import com.iprokopyuk.worldnews.R
 import dagger.android.support.DaggerAppCompatActivity
-import io.reactivex.disposables.CompositeDisposable
 import javax.inject.Inject
 
 abstract class BaseActivity<T : ViewDataBinding> : DaggerAppCompatActivity() {
@@ -38,7 +37,7 @@ abstract class BaseActivity<T : ViewDataBinding> : DaggerAppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, getLayoutResId())
     }
 
-    fun showSnackbar(text: String, textAction: String, action: () -> Unit) {
+    private fun showSnackbar(text: String, textAction: String, action: () -> Unit) {
 
         val snackbar = Snackbar.make(
             getViewForSnackbar(),
@@ -50,7 +49,7 @@ abstract class BaseActivity<T : ViewDataBinding> : DaggerAppCompatActivity() {
         snackbar.show()
     }
 
-    fun showToast(text: String) {
+    private fun showToast(text: String) {
         Toast.makeText(this, text, Toast.LENGTH_SHORT).show()
     }
 
