@@ -36,14 +36,18 @@ class NewsActivity : BaseActivity<ActivityNewsBinding>() {
 
         onObserveTointernetConnection({ newsViewModel.getRefresh() })
 
-
         newsViewModel.uiEventClick.observe(this, { url ->
 
-            val intent = Intent(this, WebActivity::class.java)
+            if (url != null) {
 
-            intent.putExtra("url", url)
+                val intent = Intent(this, WebActivity::class.java)
 
-            startActivity(intent)
+                intent.putExtra("url", url)
+
+                startActivity(intent)
+
+                newsViewModel.uiEventClick.setValue(null)
+            }
         })
     }
 

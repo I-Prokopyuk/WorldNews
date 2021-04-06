@@ -54,14 +54,14 @@
                 android:id="@+id/news_image"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/news_image_height"
-                app:progressView="@{progressBar}"
                 android:scaleType="centerCrop"
                 android:src="@{item.image}"
                 android:visibility="@{item.image!=null ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                app:progressView="@{progressBar}" />
 
             <TextView
                 android:id="@+id/news_language"
@@ -103,12 +103,12 @@
                 android:alpha="@dimen/news_text_background_alpha"
                 android:background="@drawable/background_rounded_corners"
                 android:padding="@dimen/news_attribute_text_padding"
-                app:setDate="@{item.publishedAt}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/news_attribute_font_size"
                 android:visibility="@{item.publishedAt!=null ? View.VISIBLE : View.GONE}"
                 app:layout_constraintBottom_toTopOf="@+id/news_title"
-                app:layout_constraintEnd_toEndOf="parent" />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:setDate="@{item.publishedAt}" />
 
             <TextView
                 android:id="@+id/news_title"

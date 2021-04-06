@@ -67,11 +67,10 @@ class NewsRepository
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.d(LOG_TAG, "News update or insert Local DB")
                 callbackResultViewModel.onDataAvailable()
             },
                 { throwable ->
-                    Log.d(LOG_TAG, "Error: " + throwable.message.toString())
+                    //Log.d(LOG_TAG, "Error: " + throwable.message.toString())
                     callbackResultViewModel.onDataNotAvailable()
                 })
     }
@@ -110,11 +109,6 @@ class NewsRepository
                             return@subscribe
                         }
 
-                        Log.d(
-                            LOG_TAG,
-                            "..................................... Further .............................."
-                        )
-
                         paginationOffset += paginationLimit
 
                         (response.pagination.total - paginationOffset)?.also {
@@ -146,7 +140,7 @@ class NewsRepository
                         }
                     },
                     { throwable ->
-                        Log.d(LOG_TAG, "Error: " + throwable.message.toString())
+                        //Log.d(LOG_TAG, "Error: " + throwable.message.toString())
                         callbackResultViewModel.onDataNotAvailable()
                     })
         )

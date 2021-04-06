@@ -1,22 +1,16 @@
 package com.iprokopyuk.worldnews.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
-import com.iprokopyuk.worldnews.di.scopes.AppScoped
-import com.iprokopyuk.worldnews.utils.LOG_TAG
 import com.iprokopyuk.worldnews.utils.NotNullMutableLiveData
 import com.iprokopyuk.worldnews.viewmodels.base.BaseViewModel
 import javax.inject.Inject
 
-@AppScoped
 class WebViewModel @Inject constructor() : BaseViewModel(
 
 ) {
     private var internetConnection: Boolean? = null
 
     init {
-        Log.d(LOG_TAG, "Block init WebViewModel................!!!!!!!!!!!!!!!!!")
-
         compositeDisposable.add(
             reactiveNetworkObservable()
                 .subscribe({ isConnected ->

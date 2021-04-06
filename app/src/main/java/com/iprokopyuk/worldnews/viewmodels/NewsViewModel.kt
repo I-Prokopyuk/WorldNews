@@ -30,9 +30,6 @@ class NewsViewModel @Inject constructor(
     private val callbackResult = CallbackResultNews()
 
     init {
-
-        Log.d(LOG_TAG, "Block init NewsViewModel................!!!!!!!!!!!!!!!!!")
-
         category = DEFAULT_CATEGORY
         language = DEFAULT_LANGUAGE
         countries = DEFAULT_COUNTRIES
@@ -57,6 +54,8 @@ class NewsViewModel @Inject constructor(
                     }
                 })
         )
+
+
     }
 
     private var _internetConnectionStatus: MutableLiveData<Boolean?> =
@@ -78,12 +77,10 @@ class NewsViewModel @Inject constructor(
     val containerWithInformation: NotNullMutableLiveData<Boolean>
         get() = _containerWithInformation
 
-    private val _uiEventClick = MutableLiveData<String?>()
-    val uiEventClick: LiveData<String?>
-        get() = _uiEventClick
+    var uiEventClick = MutableLiveData<String?>()
 
     fun onClickItem(url: String?) {
-        url.let { _uiEventClick.value = it }
+        url.let { uiEventClick.value = it }
     }
 
     fun getRefresh() = getNews(category, language, countries)
@@ -125,8 +122,6 @@ class NewsViewModel @Inject constructor(
         override fun onItemAtEndLoaded(itemAtEnd: News) {
             super.onItemAtEndLoaded(itemAtEnd)
 
-            Log.d(LOG_TAG, "End data  {{{{{{{{{{{{{{{{{{{{{{{")
-
             internetConnection?.let {
                 if (it) newsRepository.getNews(
                     false,
@@ -146,8 +141,6 @@ class NewsViewModel @Inject constructor(
 
             _refreshing.value = false
             _containerWithInformation.value = false
-
-            Log.d(LOG_TAG, "Data Available <<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!")
         }
 
         override fun onDataNotAvailable() {
@@ -156,8 +149,6 @@ class NewsViewModel @Inject constructor(
 
             _refreshing.value = false
             _containerWithInformation.value = true
-
-            Log.d(LOG_TAG, "Data Not Available <<<<<<<<<<<<<<<<<<<!!!!!!!!!!!!!!!!!!!!!")
         }
     }
 }

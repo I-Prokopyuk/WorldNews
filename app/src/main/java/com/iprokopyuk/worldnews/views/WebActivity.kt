@@ -25,7 +25,7 @@ class WebActivity : BaseActivity<ActivityWebBinding>() {
         binding.vm = webViewModel
         binding.setLifecycleOwner(this)
 
-       val url = intent.getStringExtra("url").toString()
+        val url = intent.getStringExtra("url").toString()
 
         webViewModel.url.setValue(url)
 

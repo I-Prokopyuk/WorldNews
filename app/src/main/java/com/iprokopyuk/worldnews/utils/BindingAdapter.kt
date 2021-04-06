@@ -51,40 +51,50 @@ fun setNews(view: RecyclerView, items: PagedList<News>?, vm: NewsViewModel) {
 @BindingAdapter("android:src", "progressView")
 fun setImageWithPicasso(imageView: ImageView, url: String?, progressBar: ProgressBar) {
 
-    url?.let {
+    if (url != null) {
 
         progressBar.visibility = View.VISIBLE
 
-        Picasso.get()
-            .load(it)
-            .fit()
-            .centerInside()
-            .error(R.drawable.no_image)
+        try {
+            Picasso.get()
+                .load(url)
+                .fit()
+                .centerInside()
+                .error(R.drawable.no_image)
 //          .memoryPolicy(MemoryPolicy.NO_CACHE, MemoryPolicy.NO_STORE)
-            .into(imageView, object : Callback {
-                override fun onSuccess() {
-                    progressBar.visibility = View.GONE
-                }
+                .into(imageView, object : Callback {
+                    override fun onSuccess() {
+                        progressBar.visibility = View.GONE
+                    }
 
-                override fun onError(e: Exception?) {
-                    progressBar.visibility = View.GONE
-                }
-            })
+                    override fun onError(e: Exception?) {
+                        progressBar.visibility = View.GONE
+                    }
+                })
+        } catch (e: Exception) {
+            //Log.d(LOG_TAG, "Error: " + e.message.toString())
+            progressBar.visibility = View.GONE
+        }
     }
 }
 
 @BindingAdapter("setDate")
 fun parseDateFormat(textView: TextView, date: String?) {
 
-    date?.let {
+    textView.text = ""
 
-        val dateParse =
-            SimpleDateFormat(
-                DATE_FORMAT_TO,
-                Locale.US
-            ).format(SimpleDateFormat(DATE_FORMAT_FROM).parse(date))
+    if (date != null) {
+        try {
+            val dateParse =
+                SimpleDateFormat(
+                    DATE_FORMAT_TO,
+                    Locale.US
+                ).format(SimpleDateFormat(DATE_FORMAT_FROM).parse(date))
 
-        textView.text = dateParse
+            textView.text = dateParse
+        } catch (e: Exception) {
+            //Log.d(LOG_TAG, "Error: " + e.message.toString())
+        }
     }
 }
 
