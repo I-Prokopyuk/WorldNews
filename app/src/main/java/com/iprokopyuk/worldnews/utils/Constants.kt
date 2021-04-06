@@ -22,4 +22,3 @@ internal const val LOG_TAG = "myLogs"
 
 //Config pagedList
 internal const val PAGE_SIZE = 15
-

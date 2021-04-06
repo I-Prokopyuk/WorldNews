@@ -5,18 +5,17 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.paging.PagedListAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.RecyclerView
 import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.databinding.ItemNewsBinding
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
-import com.iprokopyuk.worldnews.views.NewsAdapter.ModelViewHolder
 
-class NewsAdapter(val vm: NewsViewModel) : PagedListAdapter<News, ModelViewHolder>(DIFF_CALLBACK) {
+class NewsAdapter(private val vm: NewsViewModel) :
+    PagedListAdapter<News, ModelViewHolder<ItemNewsBinding>>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-        ModelViewHolder(
-            DataBindingUtil.inflate<ItemNewsBinding>(
+        ModelViewHolder<ItemNewsBinding>(
+            DataBindingUtil.inflate(
                 LayoutInflater.from(parent.context),
                 R.layout.item_news,
                 parent,
@@ -24,15 +23,10 @@ class NewsAdapter(val vm: NewsViewModel) : PagedListAdapter<News, ModelViewHolde
             )
         )
 
-    override fun onBindViewHolder(holder: ModelViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ModelViewHolder<ItemNewsBinding>, position: Int) {
 
         holder.binding.item = getItem(position)
         holder.binding.vm = vm
-    }
-
-    inner class ModelViewHolder(var binding: ItemNewsBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
     }
 
     companion object {

@@ -38,6 +38,14 @@ class AppModule {
 
     @AppScoped
     @Provides
+    fun provideGson(): Gson {
+        val gsonBuilder = GsonBuilder()
+        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+        return gsonBuilder.create()
+    }
+
+    @AppScoped
+    @Provides
     fun provideRetrofit(gson: Gson): Retrofit {
         return Retrofit.Builder()
             .baseUrl(API_BASE_URL)
@@ -50,14 +58,6 @@ class AppModule {
     @Provides
     fun provideApiServices(retrofit: Retrofit): ApiServices =
         retrofit.create(ApiServices::class.java)
-
-    @AppScoped
-    @Provides
-    fun provideGson(): Gson {
-        val gsonBuilder = GsonBuilder()
-        gsonBuilder.setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
-        return gsonBuilder.create()
-    }
 
     @AppScoped
     @Provides

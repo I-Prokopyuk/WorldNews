@@ -19,9 +19,6 @@ abstract class BaseActivity<T : ViewDataBinding> : DaggerAppCompatActivity() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-//    @Inject
-//    lateinit var compositeDisposable: CompositeDisposable
-
     @LayoutRes
     abstract fun getLayoutResId(): Int
 

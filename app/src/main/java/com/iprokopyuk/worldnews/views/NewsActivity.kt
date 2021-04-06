@@ -6,12 +6,17 @@ import androidx.activity.viewModels
 import androidx.lifecycle.LiveData
 import com.iprokopyuk.worldnews.R
 import com.iprokopyuk.worldnews.databinding.ActivityNewsBinding
+import com.iprokopyuk.worldnews.utils.CategoryNavigation
 import com.iprokopyuk.worldnews.utils.extensions.initializingCategoryNavigation
 import com.iprokopyuk.worldnews.viewmodels.NewsViewModel
 import com.iprokopyuk.worldnews.views.base.BaseActivity
 import kotlinx.android.synthetic.main.activity_news.*
+import javax.inject.Inject
 
 class NewsActivity : BaseActivity<ActivityNewsBinding>() {
+
+    @Inject
+    lateinit var categoryNavigation: CategoryNavigation
 
     val newsViewModel: NewsViewModel by viewModels {
         viewModelFactory

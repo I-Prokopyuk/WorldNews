@@ -7,11 +7,13 @@ import androidx.paging.LivePagedListBuilder
 import androidx.paging.PagedList
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.repository.NewsRepository
+import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.utils.*
 import com.iprokopyuk.worldnews.viewmodels.base.BaseViewModel
 import javax.inject.Inject
 
+@AppScoped
 class NewsViewModel @Inject constructor(
     private val newsDao: NewsDao,
     private val newsRepository: NewsRepository,

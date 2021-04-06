@@ -2,66 +2,75 @@ package com.iprokopyuk.worldnews.utils
 
 import android.content.Context
 import com.iprokopyuk.worldnews.R
+import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import com.iprokopyuk.worldnews.models.NewsCategory
+import javax.inject.Inject
 
-object CategoryNavigation {
+@AppScoped
+class CategoryNavigation @Inject constructor(private val context: Context) {
 
-    fun getCategoryList(context: Context): List<NewsCategory> {
+    private val listCategory = arrayListOf<NewsCategory>()
 
-        var categoryList = arrayListOf<NewsCategory>()
-
-        categoryList.add(
+    init {
+        listCategory.add(
             NewsCategory(
                 "general",
                 context.getString(R.string.category_name_general),
                 getDrawableResourceId(
-                    context, "category_general"
+                    "category_general"
                 )
             )
         )
-        categoryList.add(
+        listCategory.add(
             NewsCategory(
                 "business",
                 context.getString(R.string.category_name_business),
-                getDrawableResourceId(context, "category_business")
+                getDrawableResourceId("category_business")
             )
         )
 
-        categoryList.add(
+        listCategory.add(
             NewsCategory(
                 "health",
                 context.getString(R.string.category_name_health),
-                getDrawableResourceId(context, "category_health")
+                getDrawableResourceId("category_health")
             )
         )
-        categoryList.add(
+        listCategory.add(
             NewsCategory(
                 "sports",
                 context.getString(R.string.category_name_sports),
-                getDrawableResourceId(context, "category_sports")
+                getDrawableResourceId("category_sports")
             )
         )
-        categoryList.add(
+        listCategory.add(
             NewsCategory(
                 "science",
                 context.getString(R.string.category_name_science),
-                getDrawableResourceId(context, "category_science")
+                getDrawableResourceId("category_science")
             )
         )
-        categoryList.add(
+        listCategory.add(
             NewsCategory(
                 "technology",
                 context.getString(R.string.category_name_technology),
-                getDrawableResourceId(context, "categoty_technology")
+                getDrawableResourceId("categoty_technology")
             )
         )
-        categoryList.add(
+        listCategory.add(
             NewsCategory(
                 "entertainment",
                 context.getString(R.string.category_name_entertainment),
-                getDrawableResourceId(context, "category_entertainment")
+                getDrawableResourceId("category_entertainment")
             )
         )
-        return categoryList
     }
+
+    fun getDrawableResourceId(nameRes: String) = context.resources.getIdentifier(
+        nameRes,
+        "drawable",
+        context.packageName
+    )
+
+    fun getListCategory(): List<NewsCategory> = listCategory
 }

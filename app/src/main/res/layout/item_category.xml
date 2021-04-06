@@ -30,7 +30,7 @@
                 android:id="@+id/category_image"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:imageResource="@{item.image}"
+                app:imageResource="@{item.image}"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

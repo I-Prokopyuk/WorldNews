@@ -3,6 +3,7 @@ package com.iprokopyuk.worldnews.data.repository
 import android.util.Log
 import com.iprokopyuk.worldnews.data.local.NewsDao
 import com.iprokopyuk.worldnews.data.remote.api.ApiServices
+import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import com.iprokopyuk.worldnews.models.News
 import com.iprokopyuk.worldnews.utils.API_KEY
 import com.iprokopyuk.worldnews.utils.ICallbackResultBoolean
@@ -15,6 +16,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import javax.inject.Inject
 
+@AppScoped
 class NewsRepository
 @Inject constructor(
     private val newsDao: NewsDao,
@@ -73,7 +75,6 @@ class NewsRepository
                     callbackResultViewModel.onDataNotAvailable()
                 })
     }
-
 
     fun getNews(
         _clearCache: Boolean,

@@ -48,7 +48,7 @@ fun setNews(view: RecyclerView, items: PagedList<News>?, vm: NewsViewModel) {
     }
 }
 
-@BindingAdapter("android:src", "android:progressView")
+@BindingAdapter("android:src", "progressView")
 fun setImageWithPicasso(imageView: ImageView, url: String?, progressBar: ProgressBar) {
 
     url?.let {
@@ -73,7 +73,7 @@ fun setImageWithPicasso(imageView: ImageView, url: String?, progressBar: Progres
     }
 }
 
-@BindingAdapter("android:setDate")
+@BindingAdapter("setDate")
 fun parseDateFormat(textView: TextView, date: String?) {
 
     date?.let {
