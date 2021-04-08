@@ -15,24 +15,17 @@ Room based caching feature allows you to access data offline (no internet connec
 
 # Dependencies
 
-LiveData
-
-ViewModel
-
-RxJava 2
-
-Dagger 2
-
-Retrofit 2
-
-Room
-
-ReactiveNetwork
-
-Picasso
-
-Paging Library
-
+<ul>
+<li><p>ViewModel</p></li>
+<li><p>LiveData</p></li>
+<li><p>Dagger 2</p></li>
+<li><p>RxJava 2</p></li>
+<li><p>Retrofit 2</p></li>
+<li><p>Room</p></li>
+<li><p>ReactiveNetwork</p></li>
+<li><p>Picasso</p></li>
+<li><p>Paging Library</p></li>
+</ul>
 
 # Screenshots
 
