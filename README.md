@@ -25,6 +25,7 @@ Room based caching feature allows you to access data offline (no internet connec
 <li><p>ReactiveNetwork</p></li>
 <li><p>Picasso</p></li>
 <li><p>Paging Library</p></li>
+<li><p>Data Binding</p></li>
 </ul>
 
 # Screenshots
