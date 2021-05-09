@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <import type="java.text.SimpleDateFormat" />
+
+        <variable
+            name="item"
+            type="com.iprokopyuk.worldnews.models.News" />
+
+        <variable
+            name="vm"
+            type="com.iprokopyuk.worldnews.viewmodels.NewsViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:layout_marginBottom="10dp"
+        android:onClick="@{()->vm.onClickItem(item.url)}"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="10dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/purple_100"
+            android:visibility="visible">
+
+            <ProgressBar
+                android:id="@+id/progressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toTopOf="@+id/news_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                app:layout_constraintBottom_toTopOf="@+id/news_published"
+                app:layout_constraintTop_toBottomOf="@+id/news_language" />
+
+            <ImageView
+                android:id="@+id/news_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/news_image_height"
+                android:scaleType="centerCrop"
+                android:src="@{item.image}"
+                android:visibility="@{item.image!=null ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:progressView="@{progressBar}" />
+
+            <TextView
+                android:id="@+id/news_language"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_margin="@dimen/news_text_margin"
+                android:alpha="@dimen/news_text_background_alpha"
+                android:background="@drawable/background_round"
+                android:gravity="center"
+                android:padding="@dimen/news_title_description_text_padding"
+                android:text="@{item.language}"
+                android:textColor="@color/white"
+                android:textSize="@dimen/news_attribute_font_size"
+                android:visibility="@{item.language!=null ? View.VISIBLE : View.GONE}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/news_source"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/news_text_margin"
+                android:alpha="@dimen/news_text_background_alpha"
+                android:background="@drawable/background_rounded_corners"
+                android:padding="@dimen/news_attribute_text_padding"
+                android:text="@{item.source}"
+                android:textColor="@color/white"
+                android:textSize="@dimen/news_attribute_font_size"
+                android:visibility="@{item.source!=null ? View.VISIBLE : View.GONE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_max="@dimen/news_source_constraint_width_max" />
+
+            <TextView
+                android:id="@+id/news_published"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/news_text_margin"
+                android:alpha="@dimen/news_text_background_alpha"
+                android:background="@drawable/background_rounded_corners"
+                android:padding="@dimen/news_attribute_text_padding"
+                android:textColor="@color/white"
+                android:textSize="@dimen/news_attribute_font_size"
+                android:visibility="@{item.publishedAt!=null ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toTopOf="@+id/news_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:setDate="@{item.publishedAt}" />
+
+            <TextView
+                android:id="@+id/news_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="@dimen/news_text_background_alpha"
+                android:background="@color/purple_700"
+                android:padding="@dimen/news_title_description_text_padding"
+                android:text='@{item.title}'
+                android:textColor="@color/white"
+                android:textSize="@dimen/news_title_font_size"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/news_description"
+                tools:layout_editor_absoluteX="8dp" />
+
+            <TextView
+                android:id="@+id/news_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:alpha="@dimen/news_text_background_alpha"
+                android:background="@color/purple_700"
+                android:padding="@dimen/news_title_description_text_padding"
+                android:text='@{item.description}'
+                android:textColor="@color/white"
+                android:textSize="@dimen/news_description_font_size"
+                android:visibility="@{item.description!=null ? View.VISIBLE : View.GONE}"
+                app:layout_constraintBottom_toBottomOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

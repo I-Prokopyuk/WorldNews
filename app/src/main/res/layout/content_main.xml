@@ -1,98 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <View
-        android:id="@+id/view"
-        android:layout_width="wrap_content"
-        android:layout_height="150dp"
-        android:background="@drawable/layer_list_semicircle"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <data>
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/viewPager"
+        <import type="android.view.View" />
+
+        <variable
+            name="vm"
+            type="com.iprokopyuk.worldnews.viewmodels.NewsViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:layout_gravity="top"
-        android:layout_marginTop="68dp"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <include
-        layout="@layout/content_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewPager" />
+        app:layout_constraintTop_toBottomOf="parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <ImageButton
-            android:id="@+id/button_lang_usa"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="15dp"
-            android:background="@drawable/button_image_selector"
-            android:padding="8dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/flag_usa"
+        <LinearLayout
+            android:id="@+id/container_with_information"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="@{vm.containerWithInformation == true ? View.VISIBLE : View.GONE}"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/info_image"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/ic_no_connection" />
+
+            <TextView
+                android:id="@+id/info_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/news_attribute_text_padding"
+                android:text="@string/info_no_data" />
+        </LinearLayout>
+
+        <include
+            layout="@layout/content_news"
+            android:layout_width="0dp"
+            android:layout_height="600dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/viewPager"
+            app:vm="@{vm}" />
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="wrap_content"
+            android:layout_height="150dp"
+            android:background="@drawable/layer_list_semicircle"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageButton
-            android:id="@+id/button_lang_germany"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="15dp"
-            android:background="@drawable/button_image_selector"
-            android:padding="8dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/flag_germany"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/viewPager"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:layout_gravity="top"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            tools:ignore="MissingConstraints" />
 
-        <ImageButton
-            android:id="@+id/button_lang_russia"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="15dp"
-            android:background="@drawable/button_image_selector"
-            android:padding="8dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/flag_russia"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
-            android:id="@+id/button_setting"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_margin="15dp"
-            android:background="@drawable/button_image_selector"
-            android:padding="10dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_baseline_settings"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-    </LinearLayout>
+            <ImageButton
+                android:id="@+id/button_lang_usa"
+                android:layout_width="@dimen/category_ImageButton_width_height"
+                android:layout_height="@dimen/category_ImageButton_width_height"
+                android:layout_margin="@dimen/category_ImageButton_margin"
+                android:background="@drawable/button_image_selector"
+                android:onClick='@{() -> vm.getNews(vm.category,"en","us")}'
+                android:padding="@dimen/category_ImageButton_padding"
+                android:scaleType="fitCenter"
+                android:src="@drawable/flag_usa"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            <ImageButton
+                android:id="@+id/button_lang_germany"
+                android:layout_width="@dimen/category_ImageButton_width_height"
+                android:layout_height="@dimen/category_ImageButton_width_height"
+                android:layout_margin="@dimen/category_ImageButton_margin"
+                android:background="@drawable/button_image_selector"
+                android:onClick='@{() -> vm.getNews(vm.category,"de","de")}'
+                android:padding="@dimen/category_ImageButton_padding"
+                android:scaleType="fitCenter"
+                android:src="@drawable/flag_germany"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_lang_russia"
+                android:layout_width="@dimen/category_ImageButton_width_height"
+                android:layout_height="@dimen/category_ImageButton_width_height"
+                android:layout_margin="@dimen/category_ImageButton_margin"
+                android:background="@drawable/button_image_selector"
+                android:onClick='@{() -> vm.getNews(vm.category,"ru","ru")}'
+                android:padding="@dimen/category_ImageButton_padding"
+                android:scaleType="fitCenter"
+                android:src="@drawable/flag_russia"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_lang_spanish"
+                android:layout_width="@dimen/category_ImageButton_width_height"
+                android:layout_height="@dimen/category_ImageButton_width_height"
+                android:layout_margin="@dimen/category_ImageButton_margin"
+                android:background="@drawable/button_image_selector"
+                android:onClick='@{() -> vm.getNews(vm.category,"es","es")}'
+                android:padding="@dimen/category_ImageButton_padding"
+                android:scaleType="fitCenter"
+                android:src="@drawable/flag_spain"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_lang_french"
+                android:layout_width="@dimen/category_ImageButton_width_height"
+                android:layout_height="@dimen/category_ImageButton_width_height"
+                android:layout_margin="@dimen/category_ImageButton_margin"
+                android:background="@drawable/button_image_selector"
+                android:onClick='@{() -> vm.getNews(vm.category,"fr","fr")}'
+                android:padding="@dimen/category_ImageButton_padding"
+                android:scaleType="fitCenter"
+                android:src="@drawable/flag_france"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

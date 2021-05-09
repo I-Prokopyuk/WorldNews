@@ -1,6 +1,7 @@
-package com.iprokopyuk.worldnews.di
+package com.iprokopyuk.worldnews.di.components
 
 import com.iprokopyuk.worldnews.app.Application
+import com.iprokopyuk.worldnews.di.modules.AppModule
 import com.iprokopyuk.worldnews.di.scopes.AppScoped
 import dagger.BindsInstance
 import dagger.Component
@@ -9,8 +10,8 @@ import dagger.android.AndroidInjector
 
 
 @AppScoped
-@Component(modules = [AndroidInjectionModule::class])
-public interface AppComponent : AndroidInjector<Application> {
+@Component(modules = [AndroidInjectionModule::class, AppModule::class])
+interface AppComponent : AndroidInjector<Application> {
 
     @Component.Builder
     interface Builder {
@@ -20,6 +21,4 @@ public interface AppComponent : AndroidInjector<Application> {
         @BindsInstance
         fun application(app: Application): Builder
     }
-
-    override fun inject(app: Application)
 }

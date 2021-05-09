@@ -18,5 +18,4 @@ class RecyclerViewItemDecoration(context: Context, @DimenRes horizontalMarginInD
         outRect.right = horizontalMarginInPx
         outRect.left = horizontalMarginInPx
     }
-
 }
